@@ -1,0 +1,22 @@
+---
+banking:
+  account-limits:
+    daily: 10000000.00
+    monthly: 10000000.00
+
+spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    platform: postgres
+    url: jdbc:tc:postgresql:11.1:///integration-tests-db
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    properties:
+      javax:
+        persistence:
+          validation:
+            mode: none
+groovy:
+  template:
+    check-template-location: false
