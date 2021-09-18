@@ -3,7 +3,7 @@ package effective.bank.domain.model
 import com.github.javafaker.Faker
 import org.springframework.beans.factory.annotation.Autowired
 
-class BankAccountLockingSpec extends PersistenceSpecification {
+class BankAccountPersistenceAndLockingSpec extends PersistenceSpecification {
 
     @Autowired
     BankAccountRepository repo
@@ -71,7 +71,7 @@ class BankAccountLockingSpec extends PersistenceSpecification {
             account().deposit(cash)
         }
 
-        when: "I am withdrawing maximum cash permitted by a daily limit. Meanwhile someone else withdraws 1 dollar more"
+        when: "I am withdrawing maximum cash permitted by a daily limit. Meanwhile someone else has withdrawn another dollar"
         whileIamDoing {
             account().withdraw(Amount.of(100.00))
         }
@@ -79,10 +79,26 @@ class BankAccountLockingSpec extends PersistenceSpecification {
             account().withdraw(oneDollar)
         }
 
-        then: "After we've all done, my balance should decrease no more than allowed by the daily limit"
+        then: "After we've all done, my balance should decrease by one dollar (no more than allowed by the daily limit)"
         afterAll {
             println(account().balance())
             account().balance() == Amount.of(999.00)
+        }
+    }
+
+    def "Transactions should be ordered by insertion order"() {
+        when: "I save a bunch of transactions"
+        def appliedTransactions = []
+        transactional {
+            appliedTransactions << account().deposit(Amount.of(1.00))
+            appliedTransactions << account().deposit(Amount.of(2.00))
+            appliedTransactions << account().deposit(Amount.of(3.00))
+            appliedTransactions << account().deposit(Amount.of(4.00))
+            appliedTransactions << account().deposit(Amount.of(5.00))
+        }
+        then: "Then should be read back in the same order"
+        transactional {
+            account().transactions() == appliedTransactions
         }
     }
 

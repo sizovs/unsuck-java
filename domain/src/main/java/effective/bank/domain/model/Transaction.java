@@ -1,23 +1,22 @@
 package effective.bank.domain.model;
 
-import de.huxhorn.sulky.ulid.ULID;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import effective.bank.utils.TimeMachine;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.threeten.extra.LocalDateRange;
 
 @Entity
 public class Transaction {
 
     @Id
-    private String id;
+    @GeneratedValue
+
+    private Long id;
     private Amount amount;
     private LocalDateTime bookingTime;
 
@@ -28,7 +27,6 @@ public class Transaction {
         this.type = type;
         this.amount = amount;
         this.bookingTime = bookingTime;
-        this.id = new ULID().nextULID();
     }
 
     private Transaction() {
@@ -97,5 +95,24 @@ public class Transaction {
         };
 
         abstract Amount apply(Amount amount, Amount balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Transaction that) {
+            return this.id.equals(that.id);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE).append(amount).build();
     }
 }

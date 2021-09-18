@@ -30,7 +30,6 @@ abstract class PersistenceSpecification extends spock.lang.Specification {
         }
     }
 
-
     def <T> T transactional(Closure<T> closure) {
         def tx = new TransactionTemplate(txManager)
         tx.propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW
@@ -56,7 +55,7 @@ abstract class PersistenceSpecification extends spock.lang.Specification {
     }
 
     def afterAll(Closure closure) {
-        weHaveBothDone.await()
+        weHaveBothDone.await(10, TimeUnit.SECONDS)
         transactional(closure)
     }
 

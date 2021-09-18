@@ -1,18 +1,17 @@
 package effective.bank.domain.model;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
+import com.google.common.annotations.VisibleForTesting;
+import effective.bank.utils.TimeMachine;
+import one.util.streamex.StreamEx;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
-import effective.bank.utils.TimeMachine;
-import one.util.streamex.StreamEx;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 @Entity
 public class BankAccount extends DomainEntity<BankAccount> {
@@ -37,10 +36,11 @@ public class BankAccount extends DomainEntity<BankAccount> {
     private AccountHolder holder;
 
     @Version
-    long version;
+    private long version;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "BANK_ACCOUNT_IBAN")
+    @OrderBy("ID ASC")
     private List<Transaction> transactions = new ArrayList<>();
 
     public BankAccount(Iban iban, AccountHolder holder, WithdrawalLimits withdrawalLimits) {
@@ -58,6 +58,11 @@ public class BankAccount extends DomainEntity<BankAccount> {
 
     public Iban iban() {
         return new Iban(iban);
+    }
+
+    @VisibleForTesting
+    List<Transaction> transactions() {
+        return transactions;
     }
 
     public void open() {

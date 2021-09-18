@@ -17,7 +17,6 @@ dependencies {
     implementation(Dependencies.commonsValidator)
     implementation(Dependencies.protonPack)
     implementation(Dependencies.threeTenExtra)
-    implementation(Dependencies.ulid)
     implementation(Dependencies.streamEx)
     testImplementation(Dependencies.spockSpring)
     testImplementation(Dependencies.h2)

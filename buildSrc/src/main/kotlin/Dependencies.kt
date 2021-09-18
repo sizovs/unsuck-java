@@ -45,7 +45,6 @@ object Dependencies {
     const val commonsLang = "org.apache.commons:commons-lang3:3.9"
     const val guava = "com.google.guava:guava:${Versions.guava}"
     const val guavaTestlib = "com.google.guava:guava-testlib:${Versions.guava}"
-    const val ulid = "de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0"
     const val streamEx = "one.util:streamex:0.7.0"
     const val noException = "com.machinezoo.noexception:noexception:1.6.2"
 
