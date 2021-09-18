@@ -77,12 +77,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     }
 
     public void lift(WithdrawalLimits newLimits) {
-        checkArgument(
-                newLimits.dailyLimit.isGreaterThanOrEqualTo(withdrawalLimits.dailyLimit),
-                "New daily limit cannot be less than the current limit");
-        checkArgument(
-                newLimits.monthlyLimit.isGreaterThanOrEqualTo(withdrawalLimits.monthlyLimit),
-                "New daily limit cannot be less than the current limit");
+        checkArgument(newLimits.areGreaterOrEqualTo(withdrawalLimits), "New limits should be greater or equal to the current limits");
         this.withdrawalLimits = newLimits;
     }
 

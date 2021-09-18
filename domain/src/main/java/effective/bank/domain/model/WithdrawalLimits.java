@@ -2,6 +2,7 @@ package effective.bank.domain.model;
 
 import org.springframework.core.env.Environment;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
 import javax.persistence.Embeddable;
@@ -29,6 +30,10 @@ public class WithdrawalLimits extends ValueObject {
 
         this.dailyLimit = dailyLimit;
         this.monthlyLimit = monthlyLimit;
+    }
+
+    boolean areGreaterOrEqualTo(WithdrawalLimits otherLimits) {
+        return dailyLimit.isGreaterThanOrEqualTo(otherLimits.dailyLimit) && monthlyLimit.isGreaterThanOrEqualTo(otherLimits.monthlyLimit);
     }
 
     private WithdrawalLimits() {
