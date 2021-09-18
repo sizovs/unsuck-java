@@ -88,17 +88,14 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpecification {
 
     def "Transactions should be ordered by insertion order"() {
         when: "I save a bunch of transactions"
-        def appliedTransactions = []
         transactional {
-            appliedTransactions << account().deposit(Amount.of(1.00))
-            appliedTransactions << account().deposit(Amount.of(2.00))
-            appliedTransactions << account().deposit(Amount.of(3.00))
-            appliedTransactions << account().deposit(Amount.of(4.00))
-            appliedTransactions << account().deposit(Amount.of(5.00))
+            account().deposit(Amount.of(1.00))
+            account().deposit(Amount.of(2.00))
+            account().deposit(Amount.of(3.00))
         }
         then: "Then should be read back in the same order"
         transactional {
-            account().transactions() == appliedTransactions
+            account().transactions().collect { it.deposited() } == [Amount.of(1.00), Amount.of(2.00), Amount.of(3.00)]
         }
     }
 
