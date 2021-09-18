@@ -1,6 +1,7 @@
 package effective.bank.domain.model;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 import effective.bank.utils.TimeMachine;
 import one.util.streamex.StreamEx;
 
@@ -62,7 +63,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
 
     @VisibleForTesting
     List<Transaction> transactions() {
-        return transactions;
+        return ImmutableList.copyOf(transactions);
     }
 
     public void open() {
