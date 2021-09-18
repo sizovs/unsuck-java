@@ -12,12 +12,15 @@ dependencies {
     implementation(projects.utils)
     implementation(Dependencies.javaxJson)
     implementation(Dependencies.springBootJpa)
+    implementation(Dependencies.springBootTest)
     implementation(Dependencies.commonsLang)
     implementation(Dependencies.commonsValidator)
     implementation(Dependencies.protonPack)
     implementation(Dependencies.threeTenExtra)
     implementation(Dependencies.ulid)
     implementation(Dependencies.streamEx)
+    testImplementation(Dependencies.spockSpring)
+    testImplementation(Dependencies.h2)
 }
 
 tasks.withType<BootJar> {

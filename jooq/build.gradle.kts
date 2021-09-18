@@ -51,7 +51,7 @@ tasks.register("generateJooq") {
                 .withLogging(TRACE)
                 .withJdbc(
                     Jdbc()
-                        .withDriver(org.postgresql.Driver::class.qualifiedName)
+                        .withDriver("org.postgresql.Driver")
                         .withUrl(pg.jdbcUrl)
                         .withUser(pg.username)
                         .withPassword(pg.password)

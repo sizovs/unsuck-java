@@ -11,6 +11,8 @@ import javax.persistence.*;
 
 import effective.bank.utils.TimeMachine;
 import one.util.streamex.StreamEx;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class BankAccount extends DomainEntity<BankAccount> {
@@ -34,9 +36,11 @@ public class BankAccount extends DomainEntity<BankAccount> {
     @Embedded
     private AccountHolder holder;
 
-    @ElementCollection
-    @CollectionTable(name = "BANK_ACCOUNT_TX", joinColumns = @JoinColumn(name = "BANK_ACCOUNT_IBAN"))
-    @OrderColumn(name = "INDEX")
+    @Version
+    long version;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "BANK_ACCOUNT_IBAN")
     private List<Transaction> transactions = new ArrayList<>();
 
     public BankAccount(Iban iban, AccountHolder holder, WithdrawalLimits withdrawalLimits) {
@@ -64,10 +68,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
     public void suspend() {
         checkState(!this.status.equals(Status.SUSPENDED), "Bank account is already suspended");
         this.status = Status.SUSPENDED;
-    }
-
-    public Transaction tx(String uid) {
-        return transactions.stream().filter(tx -> tx.uid().equals(uid)).findAny().orElseThrow();
     }
 
     public void lift(WithdrawalLimits newLimits) {
@@ -112,6 +112,10 @@ public class BankAccount extends DomainEntity<BankAccount> {
         return StreamEx.of(transactions).foldRight(Amount.ZERO, Transaction::apply);
     }
 
+    WithdrawalLimits withdrawalLimits() {
+        return withdrawalLimits;
+    }
+
     public void close(UnsatisfiedObligations unsatisfiedObligations) {
         checkState(
                 !unsatisfiedObligations.exist(),
@@ -152,9 +156,9 @@ public class BankAccount extends DomainEntity<BankAccount> {
             checkState(!dailyLimitReached, "Daily withdrawal limit (%s) reached.", dailyLimit);
         }
 
-        private Amount withdrawn(LocalDate someDay) {
+        private Amount withdrawn(LocalDate withdrawalDay) {
             return StreamEx.of(transactions)
-                    .filter(tx -> tx.isBookedOn(someDay))
+                    .filter(tx -> tx.isBookedOn(withdrawalDay))
                     .filter(tx -> tx.isWithdrawal())
                     .foldRight(Amount.ZERO, Transaction::apply)
                     .abs();

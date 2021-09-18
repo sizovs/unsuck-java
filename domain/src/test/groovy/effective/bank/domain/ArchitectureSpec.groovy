@@ -43,7 +43,7 @@ class ArchitectureSpec extends Specification {
                 .and()
                 .areNotAnnotatedWith(MappedSuperclass)
                 .and()
-                .doNotHaveSimpleName(getClass().simpleName)
+                .areNotAssignableTo(Specification)
                 .should()
                 .dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "javax.persistence..", "org.hibernate..")
                 .because("only repositories and entities should be dealing with storage")

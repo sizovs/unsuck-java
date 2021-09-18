@@ -30,6 +30,7 @@ object Dependencies {
     const val postgres = "org.postgresql:postgresql:42.2.14"
 
     const val springBootJpa = "org.springframework.boot:spring-boot-starter-data-jpa"
+    const val springBootTest = "org.springframework.boot:spring-boot-starter-test"
 
 
     const val groovy = "org.codehaus.groovy:groovy:${Versions.groovy}"
@@ -50,6 +51,7 @@ object Dependencies {
 
     const val faker = "com.github.javafaker:javafaker:1.0.0"
     const val spock = "org.spockframework:spock-core:2.0-groovy-3.0"
+    const val spockSpring = "org.spockframework:spock-spring:2.0-groovy-3.0"
     const val slf4jApi = "org.slf4j:slf4j-api:${Versions.slf4j}"
     const val slf4jSimple = "org.slf4j:slf4j-simple:${Versions.slf4j}"
     const val jsonAssert = "org.skyscreamer:jsonassert:1.5.0"

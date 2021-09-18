@@ -3,15 +3,11 @@ package effective.bank.application
 import an.awesome.pipelinr.Command
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import effective.bank.application.infra.spring.annotations.PrototypeComponent
-import groovy.transform.Memoized
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.config.BeanDefinition
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noCodeUnits
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices
 
 class ArchitectureSpec extends Specification {

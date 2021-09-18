@@ -5,18 +5,19 @@ import de.huxhorn.sulky.ulid.ULID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
 
 import effective.bank.utils.TimeMachine;
 import org.threeten.extra.LocalDateRange;
 
-@Embeddable
+@Entity
 public class Transaction {
-    private static final ULID ULID_GENERATOR = new ULID();
 
-    private String uid;
+    @Id
+    private String id;
     private Amount amount;
     private LocalDateTime bookingTime;
 
@@ -24,17 +25,13 @@ public class Transaction {
     private Type type;
 
     private Transaction(Type type, Amount amount, LocalDateTime bookingTime) {
-        this.uid = ULID_GENERATOR.nextULID();
         this.type = type;
         this.amount = amount;
         this.bookingTime = bookingTime;
+        this.id = new ULID().nextULID();
     }
 
     private Transaction() {
-    }
-
-    public String uid() {
-        return uid;
     }
 
     Amount apply(Amount balance) {
