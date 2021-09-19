@@ -14,75 +14,70 @@ import static javax.json.Json.createArrayBuilder;
 import static javax.json.Json.createObjectBuilder;
 
 class BankStatement {
-  private final Collection<Entry> entries = new ArrayList<>();
-  private final BalanceOnADate closingBalance;
-  private final BalanceOnADate startingBalance;
 
-  BankStatement(
-          LocalDate fromInclusive, LocalDate toInclusive, Collection<Transaction> transactions) {
-    var startingBalance =
-        StreamEx.of(transactions)
-            .filter(tx -> tx.isBookedBefore(fromInclusive))
-            .foldRight(Amount.ZERO, Transaction::apply);
+    private final Collection<Entry> entries = new ArrayList<>();
+    private final BalanceOnADate closingBalance;
+    private final BalanceOnADate startingBalance;
 
-    var closingBalance =
-        StreamEx.of(transactions)
-            .filter(tx -> tx.isBookedDuring(fromInclusive, toInclusive))
-            .foldLeft(
-                startingBalance,
-                (amount, tx) -> {
-                  var balance = tx.apply(amount);
-                  newEntry(tx, balance);
-                  return balance;
-                });
+    BankStatement(
+            LocalDate fromInclusive, LocalDate toInclusive, Collection<Transaction> transactions) {
+        var startingBalance =
+                StreamEx.of(transactions)
+                        .filter(tx -> tx.isBookedBefore(fromInclusive))
+                        .foldRight(Amount.ZERO, Transaction::apply);
 
-    this.startingBalance = new BalanceOnADate(fromInclusive, startingBalance);
-    this.closingBalance = new BalanceOnADate(toInclusive, closingBalance);
-  }
+        var closingBalance =
+                StreamEx.of(transactions)
+                        .filter(tx -> tx.isBookedDuring(fromInclusive, toInclusive))
+                        .foldLeft(
+                                startingBalance,
+                                (amount, tx) -> {
+                                    var balance = tx.apply(amount);
+                                    newEntry(tx, balance);
+                                    return balance;
+                                });
 
-  private void newEntry(Transaction tx, Amount balance) {
-    entries.add(new Entry(tx.bookingTime(), tx.withdrawn(), tx.deposited(), balance));
-  }
+        this.startingBalance = new BalanceOnADate(fromInclusive, startingBalance);
+        this.closingBalance = new BalanceOnADate(toInclusive, closingBalance);
+    }
 
-  public String json() {
-    var root = createObjectBuilder();
+    private void newEntry(Transaction tx, Amount balance) {
+        entries.add(new Entry(tx.bookingTime().truncatedTo(MINUTES), tx.withdrawn(), tx.deposited(), balance));
+    }
 
-    root.add(
-        "startingBalance",
-        createObjectBuilder()
-            .add("amount", startingBalance.balance + "")
-            .add("date", startingBalance.date.format(ISO_DATE)));
+    public String json() {
+        var root = createObjectBuilder();
 
-    root.add(
-        "closingBalance",
-        createObjectBuilder()
-            .add("amount", closingBalance.balance + "")
-            .add("date", closingBalance.date.format(ISO_DATE)));
-
-    var items = createArrayBuilder();
-    entries.forEach(
-        it ->
-            items.add(
+        root.add(
+                "startingBalance",
                 createObjectBuilder()
-                    .add("time", it.time.format(ISO_LOCAL_DATE_TIME))
-                    .add("withdrawal", it.withdrawal + "")
-                    .add("deposit", it.deposit + "")
-                    .add("balance", it.balance + "")));
+                        .add("amount", startingBalance.balance + "")
+                        .add("date", startingBalance.date.format(ISO_DATE)));
 
-    root.add("transactions", items);
+        root.add(
+                "closingBalance",
+                createObjectBuilder()
+                        .add("amount", closingBalance.balance + "")
+                        .add("date", closingBalance.date.format(ISO_DATE)));
 
-    return root.build().toString();
-  }
+        var items = createArrayBuilder();
+        entries.forEach(
+                it ->
+                        items.add(
+                                createObjectBuilder()
+                                        .add("time", it.time.format(ISO_LOCAL_DATE_TIME))
+                                        .add("withdrawal", it.withdrawal + "")
+                                        .add("deposit", it.deposit + "")
+                                        .add("balance", it.balance + "")));
 
-  private record Entry(LocalDateTime time, Amount withdrawal, Amount deposit, Amount balance) {
-      private Entry(LocalDateTime time, Amount withdrawal, Amount deposit, Amount balance) {
-        this.time = time.truncatedTo(MINUTES);
-        this.withdrawal = withdrawal;
-        this.deposit = deposit;
-        this.balance = balance;
-      }
-  }
+        root.add("transactions", items);
 
-  private record BalanceOnADate(LocalDate date, Amount balance) {
-  }
+        return root.build().toString();
+    }
+
+    private record Entry(LocalDateTime time, Amount withdrawal, Amount deposit, Amount balance) {
+    }
+
+    private record BalanceOnADate(LocalDate date, Amount balance) {
+    }
 }

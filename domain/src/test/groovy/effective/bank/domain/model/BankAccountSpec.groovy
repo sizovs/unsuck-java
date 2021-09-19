@@ -175,7 +175,7 @@ class BankAccountSpec extends Specification {
     }
 
 
-    def "publishes a unsuck.BankAccountOpened event"() {
+    def "publishes a BankAccountOpened event"() {
         when: "I try to open a bank account"
         account.open()
 
