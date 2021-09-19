@@ -16,8 +16,8 @@ import static javax.json.Json.createObjectBuilder;
 class BankStatement {
 
     private final Collection<Entry> entries = new ArrayList<>();
-    private final BalanceOnADate closingBalance;
-    private final BalanceOnADate startingBalance;
+    private final BalanceSnapshot closingBalance;
+    private final BalanceSnapshot startingBalance;
 
     BankStatement(
             LocalDate fromInclusive, LocalDate toInclusive, Collection<Transaction> transactions) {
@@ -37,8 +37,8 @@ class BankStatement {
                                     return balance;
                                 });
 
-        this.startingBalance = new BalanceOnADate(fromInclusive, startingBalance);
-        this.closingBalance = new BalanceOnADate(toInclusive, closingBalance);
+        this.startingBalance = new BalanceSnapshot(startingBalance, fromInclusive);
+        this.closingBalance = new BalanceSnapshot(closingBalance, toInclusive);
     }
 
     private void newEntry(Transaction tx, Amount balance) {
@@ -78,6 +78,6 @@ class BankStatement {
     private record Entry(LocalDateTime time, Amount withdrawal, Amount deposit, Amount balance) {
     }
 
-    private record BalanceOnADate(LocalDate date, Amount balance) {
+    private record BalanceSnapshot(Amount balance, LocalDate date) {
     }
 }
