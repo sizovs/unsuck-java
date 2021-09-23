@@ -23,7 +23,7 @@ class BankAccountSpec extends Specification {
 
     def defaultLimits = new WithdrawalLimits(Amount.of("100.00"), Amount.of("1000.00"))
 
-    def iban = new Iban(faker.finance().iban("EE"), { true } as IbanUniqueness)
+    def iban = new Iban(faker.finance().iban("EE"), IbanUniqueness.GUARANTEED)
 
     @Subject
     BankAccount account = new BankAccount(iban, accountHolder, defaultLimits)

@@ -18,7 +18,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpecification {
 
     @Override
     def setupTransactional() {
-        def uniqueIban = new Iban(iban, { true } as IbanUniqueness)
+        def uniqueIban = new Iban(iban, IbanUniqueness.GUARANTEED)
         def account = new BankAccount(uniqueIban, accountHolder, defaultLimits)
         account.open()
         repo.save(account)
@@ -81,7 +81,6 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpecification {
 
         then: "After we've all done, my balance should decrease by one dollar (no more than allowed by the daily limit)"
         afterAll {
-            println(account().balance())
             account().balance() == Amount.of(999.00)
         }
     }

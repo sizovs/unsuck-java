@@ -19,7 +19,7 @@ class CommandJsonMapper extends JsonMapper {
     @Override
     protected TypeResolverBuilder<?> _constructDefaultTypeResolverBuilder(DefaultTyping applicability, PolymorphicTypeValidator ptv) {
         // This guy limits JsonMapper to include default types only for classes that are subtypes of Command.
-        // We need this because as of Jackson 2.12.4, Jackson also includes type info about LocalDate etc.
+        // We need this because Jackson (tested in 2.12.4), includes type info for standard library classes such as LocalDate etc.
         class CommandTypeResolverBuilder extends DefaultTypeResolverBuilder {
             public CommandTypeResolverBuilder(DefaultTyping defaultTyping, PolymorphicTypeValidator ptv) {
                 super(defaultTyping, ptv);
