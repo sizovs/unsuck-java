@@ -22,14 +22,14 @@ class ArchitectureSpec extends Specification {
         rule.check(classes)
     }
 
-    def "all handlers must have a prototype scope"() {
+    def "all handlers must be annotated with @PrototypeComponent"() {
         given:
         final rule = classes()
                 .that()
                 .areAssignableTo(Command.Handler)
                 .should()
                 .beAnnotatedWith(PrototypeComponent)
-                .because("we want every handler to have a prototype scope")
+                .because("we want every handler to be stateful")
         expect:
         rule.check(classes)
     }

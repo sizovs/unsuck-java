@@ -58,7 +58,7 @@ class ArchitectureSpec extends Specification {
                 .areAssignableTo(Repository)
                 .should()
                 .beAnnotatedWith(DomainRepository)
-                .because("it requires tx to be started/stopped at higher levels")
+                .because("we should be managing transactions at the service layer")
         expect:
         rule.check(classes)
     }
