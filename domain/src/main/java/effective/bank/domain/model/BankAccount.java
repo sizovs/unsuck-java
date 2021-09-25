@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import effective.bank.utils.TimeMachine;
 import one.util.streamex.StreamEx;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Month;
