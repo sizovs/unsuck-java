@@ -44,7 +44,7 @@ class BankAccountSpec extends Specification {
         account.isClosed()
     }
 
-    def "cannot be closed if some unsatisfied obligations exist"() {
+    def "cannot be closed if unsatisfied obligations exist"() {
         given: "I have some unsatisfied obligations"
         def unsatisfiedObligations = { true } as UnsatisfiedObligations
 
@@ -56,7 +56,7 @@ class BankAccountSpec extends Specification {
         e.message == "Bank account cannot be closed because a holder has unsatisfied obligations"
     }
 
-    def "supports deposits"() {
+    def "can be deposited"() {
         given: "account is open"
         account.open()
 
@@ -72,7 +72,7 @@ class BankAccountSpec extends Specification {
         tx.withdrawn() == Amount.of(0.00)
     }
 
-    def "supports withdrawals"() {
+    def "can be withdrawn"() {
         given: "account is open"
         account.open()
 
@@ -114,7 +114,7 @@ class BankAccountSpec extends Specification {
         e.message == "Account is not open."
     }
 
-    def "cannot be withdrawn for the amount that exceeds the balance"() {
+    def "cannot be withdrawn for the amount exceeding the balance"() {
         given: "Account is open"
         account.open()
 
@@ -129,7 +129,7 @@ class BankAccountSpec extends Specification {
         e.message == "Not enough funds available on your account."
     }
 
-    def "cannot be withdrawn for the amount that exceeds the daily limit"() {
+    def "cannot be withdrawn for the amount exceeding the daily limit"() {
         given: "Account is open"
         account.open()
 
@@ -144,7 +144,7 @@ class BankAccountSpec extends Specification {
         e.message == "Daily withdrawal limit (100.00) reached."
     }
 
-    def "cannot be withdrawn for the amount than exceeds the monthly limit"() {
+    def "cannot be withdrawn for the amount exceeding the monthly limit"() {
         given: "Account is open"
         account.open()
 
@@ -159,23 +159,10 @@ class BankAccountSpec extends Specification {
         e.message == "Monthly withdrawal limit (1000.00) reached."
     }
 
-    def "cannot be closed if unsatisfied obligations exist"() {
-        given: "Account is open"
-        account.open()
-
-        and: "I have some unsatisfied obligations"
-        def unsatisfiedObligations = { true } as UnsatisfiedObligations
-
-        when: "I close my account"
-        account.close unsatisfiedObligations
-
-        then: "I get an error"
-        def e = thrown(IllegalStateException)
-        e.message == "Bank account cannot be closed because a holder has unsatisfied obligations"
-    }
 
 
-    def "publishes a BankAccountOpened event"() {
+
+    def "publishes a BankAccountOpened event when opened"() {
         when: "I try to open a bank account"
         account.open()
 
