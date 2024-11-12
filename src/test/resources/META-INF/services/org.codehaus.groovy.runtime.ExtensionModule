@@ -1,0 +1,3 @@
+moduleName=Spock extensions
+moduleVersion=1.0.0
+extensionClasses=cleanbank.acceptance.MockMvcExtensions

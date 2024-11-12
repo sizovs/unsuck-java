@@ -1,0 +1,23 @@
+---
+spring:
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
+      javax:
+        persistence:
+          validation:
+            mode: none
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+  groovy:
+    template:
+      check-template-location: false
+
+withdrawal-limits:
+  daily-limit: 10000000.00
+  monthly-limit: 10000000.00
