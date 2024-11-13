@@ -3,7 +3,6 @@ package cleanbank.e2e.commons
 import cleanbank.infra.mail.Postman
 import net.datafaker.Faker
 import org.springframework.mail.SimpleMailMessage
-import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.MockMvc
 
 import java.util.function.Predicate
@@ -17,10 +16,10 @@ class Person implements MockMvcTrait {
   String email = faker.internet().emailAddress()
   String ipAddress = faker.internet().ipV4Address()
 
+  Optional<String> clientId = Optional.empty()
+
   MockMvc mvc
   Postman postman
-
-  Optional<String> clientId = Optional.empty()
 
   Person(MockMvc mvc, Postman postman) {
     this.mvc = mvc
@@ -40,8 +39,8 @@ class Person implements MockMvcTrait {
     this.clientId = Optional.of(clientId)
   }
 
-  MockHttpServletResponse getsProfile() {
-    get("/clients/${clientId.get()}", [:])
+  def getsProfile() {
+    get("/clients/${clientId.get()}", [:]).json()
   }
 
   def appliesForBankAccount(iban) {
@@ -52,7 +51,7 @@ class Person implements MockMvcTrait {
     ])
   }
 
-  def shouldReceiveAnEmail(Predicate<SimpleMailMessage> emailSpec) {
+  def shouldReceiveEmail(Predicate<SimpleMailMessage> emailSpec) {
     postman.deliveries().any { it.to.contains(email) && emailSpec(it) }
   }
 

@@ -14,7 +14,7 @@ class BankAccountE2ESpec extends E2ESpec {
 
     then:
     eventually {
-      someone.shouldReceiveAnEmail {
+      someone.shouldReceiveEmail {
         it.subject == "Heads up from Cleanbank"
         it.text == "Congratulations, $someone.firstName $someone.lastName! Your bank account $iban is ready. Thanks for using our services!"
       }
