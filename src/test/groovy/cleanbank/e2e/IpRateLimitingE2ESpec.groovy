@@ -18,6 +18,7 @@ class IpRateLimitingE2ESpec extends E2ESpec {
     and:
     someoneElse.registersAsClient()
 
+    // someone gets some of their requests throttled
     then:
     def successfulRequest = someone.responses.count { it.status == 200 }
     def throttledRequests = someone.responses.count { it.status == 429 }
