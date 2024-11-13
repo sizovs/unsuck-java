@@ -7,7 +7,7 @@ import cleanbank.infra.spring.annotations.PrototypeScoped;
 import java.util.UUID;
 
 
-public record GetClientProfile(UUID clientID) implements Command<GetClientProfile.Profile> {
+public record GetClientProfile(UUID clientId) implements Command<GetClientProfile.Profile> {
 
   public record Profile(String email, String firstName, String lastName) {
   }
@@ -23,7 +23,7 @@ public record GetClientProfile(UUID clientID) implements Command<GetClientProfil
 
     @Override
     public Profile react(GetClientProfile cmd) {
-      var client = clients.findById(cmd.clientID());
+      var client = clients.findById(cmd.clientId());
       return new Profile(client.email(), client.firstName(), client.lastName());
     }
   }
