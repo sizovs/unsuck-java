@@ -27,11 +27,11 @@ class BankAccountE2ESpec extends E2ESpec {
     def someone = person()
 
     when:
-    def someoneGets = someone.appliesForBankAccount(invalidIban)
+    someone.appliesForBankAccount(invalidIban)
 
     then:
-    someoneGets.status == 400
-    someoneGets.json() == ["iban must be valid"]
+    someone.responses.last().status == 400
+    someone.responses.last().json() == ["iban must be valid"]
   }
 
 
@@ -42,17 +42,17 @@ class BankAccountE2ESpec extends E2ESpec {
     def someoneElse = person()
 
     when:
-    def someoneGets = someone.appliesForBankAccount(iban)
+    someone.appliesForBankAccount(iban)
 
     and:
-    def someoneElseGets = someoneElse.appliesForBankAccount(iban)
+    someoneElse.appliesForBankAccount(iban)
 
     then:
-    someoneGets.status == 200
+    someone.responses.last().status == 200
 
     and:
-    someoneElseGets.status == 400
-    someoneElseGets.json() == ["iban is already taken"]
+    someoneElse.responses.last().status == 400
+    someoneElse.responses.last().json() == ["iban is already taken"]
   }
 
 }

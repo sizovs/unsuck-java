@@ -23,7 +23,7 @@ abstract class E2ESpec extends Specification {
 
   protected Faker faker = new Faker()
 
-  def person() {
+  Person person() {
     new Person(mvc, postman)
   }
 
