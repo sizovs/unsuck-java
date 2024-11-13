@@ -1,4 +1,4 @@
-package cleanbank.acceptance
+package cleanbank.e2e.commons
 
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.MockMvc

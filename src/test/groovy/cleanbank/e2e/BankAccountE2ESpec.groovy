@@ -1,6 +1,8 @@
-package cleanbank.acceptance
+package cleanbank.e2e
 
-class BankAccountAcceptanceSpec extends AcceptanceSpec {
+import cleanbank.e2e.commons.E2ESpec
+
+class BankAccountE2ESpec extends E2ESpec {
 
   def "new bank account opening with congratulations"() {
     given:

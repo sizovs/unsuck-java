@@ -1,4 +1,4 @@
-package cleanbank.acceptance
+package cleanbank.e2e.commons
 
 import cleanbank.infra.mail.Postman
 import net.datafaker.Faker

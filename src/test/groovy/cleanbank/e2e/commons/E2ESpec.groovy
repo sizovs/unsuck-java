@@ -1,4 +1,4 @@
-package cleanbank.acceptance
+package cleanbank.e2e.commons
 
 import cleanbank.infra.mail.Postman
 import net.datafaker.Faker
@@ -11,7 +11,7 @@ import spock.util.concurrent.PollingConditions
 
 @SpringBootTest
 @AutoConfigureMockMvc
-abstract class AcceptanceSpec extends Specification {
+abstract class E2ESpec extends Specification {
 
   private def polling = new PollingConditions(timeout: 10, delay: 1)
 

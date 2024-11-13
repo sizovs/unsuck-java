@@ -1,4 +1,4 @@
-package cleanbank.acceptance
+package cleanbank.e2e.commons
 
 import groovy.json.JsonSlurper
 import org.springframework.mock.web.MockHttpServletResponse
