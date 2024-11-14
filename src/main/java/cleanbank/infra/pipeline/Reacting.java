@@ -17,13 +17,13 @@ class Reacting implements Now {
       .stream()
       .filter(it -> it.matches(command))
       .findFirst()
-      .orElseThrow(() -> new NoReactionFoundException(command));
+      .orElseThrow(() -> new NoReactionFound(command));
 
     return (R) reaction.react(command);
   }
 
-  static class NoReactionFoundException extends RuntimeException {
-    NoReactionFoundException(Command command) {
+  static class NoReactionFound extends RuntimeException {
+    NoReactionFound(Command command) {
       super("Cannot find reaction for command " + command.getClass().getSimpleName());
     }
   }
