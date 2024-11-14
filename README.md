@@ -43,8 +43,7 @@ More awesomeness:
 1. H2 supports some advanced SQL features (such as SKIP LOCKED, which we rely on to implement a DB-backed queue). If your app relies on Postgres functionality, you can isolate these tests and run them against real Postgres (using Postgres Templates or TestContainers).
 
 ### A note on testing strategy
-My testing strategy is simple – E2E tests are mandatory, since the use cases our app provides via web api should be kept **stable**. Everything else is there to support the use-cases and is **volatile**; internals can and will regularly change as a result of refactoring and restructuring. As long as use cases keep working – E2E tests should pass. Since what we expose is Web API, we should exercise the app via the Web API.
-
+My testing strategy is simple – E2E tests are mandatory, since the use cases our app provides via web api should be kept **stable**. Everything else is there to support the use-cases and is **volatile**; internals can and will regularly change as a result of refactoring and restructuring. As long as use cases keep working – E2E tests should pass. Good tests shall not be coupled to implementation details. Since what we expose is Web API, we should exercise the app via the Web API.
 
 Unit tests target a specific code unit—a domain object, a controller, a repository. Some classes deserve a unit test; others don’t, and the decision should be made case-by-case. As with any additional code, trade-offs must be considered since writing and maintaining unit tests incurs costs. Assuming that E2E tests are mandatory and all observable functionality is covered, a unit test should add value to the test suite, with benefits outweighing its maintenance costs.
 
