@@ -142,7 +142,7 @@ class BankAccountSpec extends Specification {
 
     then: "I get an error"
     def e = thrown(IllegalStateException)
-    e.message == "Daily withdrawal limit (100.00) reached."
+    e.message == "Daily withdrawal limit reached."
   }
 
   def "cannot be withdrawn when monthly limit exceeded"() {
@@ -157,7 +157,7 @@ class BankAccountSpec extends Specification {
 
     then: "I get an error"
     def e = thrown(IllegalStateException)
-    e.message == "Monthly withdrawal limit (1000.00) reached."
+    e.message == "Monthly withdrawal limit reached."
   }
 
 

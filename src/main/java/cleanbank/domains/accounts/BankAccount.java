@@ -2,9 +2,7 @@ package cleanbank.domains.accounts;
 
 import cleanbank.infra.modeling.DomainEntity;
 import cleanbank.infra.modeling.VisibleForHibernate;
-import cleanbank.infra.time.TimeMachine;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import jakarta.persistence.*;
 import one.util.streamex.StreamEx;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static cleanbank.infra.time.TimeMachine.today;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -67,7 +66,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
 
   public void open() {
     this.status = Status.OPEN;
-    publish(new BankAccountOpened(iban, TimeMachine.today()));
+    publish(new BankAccountOpened(iban, today()));
   }
 
   public void suspend() {
@@ -81,22 +80,51 @@ public class BankAccount extends DomainEntity<BankAccount> {
   }
 
   public Transaction withdraw(BigDecimal amount) {
-    new EnforceOpen();
+    checkState(isOpen(), "Account is not open.");
 
     var tx = Transaction.withdrawalOf(amount);
     transactions.add(tx);
 
-    new EnforcePositiveBalance();
-    new EnforceMonthlyWithdrawalLimit();
-    new EnforceDailyWithdrawalLimit();
+    checkState(balance().signum() >= 0, "Not enough funds available on your account.");
+    checkState(isWithinMonthlyLimit(), "Monthly withdrawal limit reached.");
+    checkState(isWithinDailyLimit(), "Daily withdrawal limit reached.");
 
     publish(new WithdrawalHappened(iban, tx));
 
     return tx;
   }
 
+  private boolean isWithinMonthlyLimit() {
+    var thisMonth = today().getMonth();
+    var monthlyLimit = withdrawalLimits.monthlyLimit();
+    var monthlyLimitReached = withdrawn(thisMonth).compareTo(monthlyLimit) > 0;
+    return !monthlyLimitReached;
+  }
+
+  BigDecimal withdrawn(Month month) {
+    return StreamEx.of(transactions)
+      .filter(tx -> tx.isBookedIn(month))
+      .filter(tx -> tx.isWithdrawal())
+      .foldRight(BigDecimal.ZERO, Transaction::apply)
+      .abs();
+  }
+
+  private boolean isWithinDailyLimit() {
+    var dailyLimit = withdrawalLimits.dailyLimit();
+    var dailyLimitReached = withdrawn(today()).compareTo(dailyLimit) > 0;
+    return !dailyLimitReached;
+  }
+
+  private BigDecimal withdrawn(LocalDate withdrawalDay) {
+    return StreamEx.of(transactions)
+      .filter(tx -> tx.bookingDate().isEqual(withdrawalDay))
+      .filter(tx -> tx.isWithdrawal())
+      .foldRight(BigDecimal.ZERO, Transaction::apply)
+      .abs();
+  }
+
   public Transaction deposit(BigDecimal amount) {
-    new EnforceOpen();
+    checkState(isOpen(), "Account is not open.");
 
     var tx = Transaction.depositOf(amount);
     transactions.add(tx);
@@ -130,51 +158,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
 
   public boolean isClosed() {
     return status.equals(Status.CLOSED);
-  }
-
-  private class EnforceOpen {
-    private EnforceOpen() {
-      checkState(isOpen(), "Account is not open.");
-    }
-  }
-
-  private class EnforcePositiveBalance {
-    private EnforcePositiveBalance() {
-      checkState(balance().signum() >= 0, "Not enough funds available on your account.");
-    }
-  }
-
-  private class EnforceDailyWithdrawalLimit {
-    private EnforceDailyWithdrawalLimit() {
-      var dailyLimit = withdrawalLimits.dailyLimit();
-      var dailyLimitReached = withdrawn(TimeMachine.today()).compareTo(dailyLimit) > 0;
-      Preconditions.checkState(!dailyLimitReached, "Daily withdrawal limit (%s) reached.", dailyLimit);
-    }
-
-    private BigDecimal withdrawn(LocalDate withdrawalDay) {
-      return StreamEx.of(transactions)
-        .filter(tx -> tx.bookingDate().isEqual(withdrawalDay))
-        .filter(tx -> tx.isWithdrawal())
-        .foldRight(BigDecimal.ZERO, Transaction::apply)
-        .abs();
-    }
-  }
-
-  private class EnforceMonthlyWithdrawalLimit {
-    private EnforceMonthlyWithdrawalLimit() {
-      var thisMonth = TimeMachine.today().getMonth();
-      var monthlyLimit = withdrawalLimits.monthlyLimit();
-      var monthlyLimitReached = withdrawn(thisMonth).compareTo(monthlyLimit) > 0;
-      Preconditions.checkState(!monthlyLimitReached, "Monthly withdrawal limit (%s) reached.", monthlyLimit);
-    }
-
-    private BigDecimal withdrawn(Month month) {
-      return StreamEx.of(transactions)
-        .filter(tx -> tx.isBookedIn(month))
-        .filter(tx -> tx.isWithdrawal())
-        .foldRight(BigDecimal.ZERO, Transaction::apply)
-        .abs();
-    }
   }
 
 }
