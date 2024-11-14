@@ -2,12 +2,13 @@ package cleanbank.commands;
 
 import cleanbank.domains.crm.Clients;
 import cleanbank.infra.pipeline.Command;
+import cleanbank.infra.pipeline.ReadOnly;
 import cleanbank.infra.spring.annotations.PrototypeScoped;
 
 import java.util.UUID;
 
 
-public record GetClientProfile(UUID clientId) implements Command<GetClientProfile.Profile> {
+public record GetClientProfile(UUID clientId) implements Command<GetClientProfile.Profile>, ReadOnly {
 
   public record Profile(String email, String firstName, String lastName) {
   }
