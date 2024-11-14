@@ -48,6 +48,6 @@ My testing strategy is simple – E2E tests are mandatory, since the use cases o
 
 Unit tests target a specific code unit—a domain object, a controller, a repository. Some classes deserve a unit test; others don’t, and the decision should be made case-by-case. As with any additional code, trade-offs must be considered since writing and maintaining unit tests incurs costs. Assuming that E2E tests are mandatory and all observable functionality is covered, a unit test should add value to the test suite, with benefits outweighing its maintenance costs.
 
-For example, BankAccount is an ideal candidate for unit testing because it’s a self-contained unit that consolidates non-trivial logic and invariants. Testing these in isolation provides a faster safety net and turns the test into an executable specification for that unit. It’s a useful, low-overhead, addition to the test suite.
+For example, `BankAccount` is an ideal candidate for unit testing because it’s a self-contained unit that consolidates non-trivial logic and invariants. Testing these in isolation provides a faster safety net and turns the test into an executable specification for that unit. It’s a useful, low-overhead, addition to the test suite.
 
-On the other hand, unit-testing Client doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes a more complex object, then creating unit tests could be worthwhile. But for now, YAGNI
+On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes a more complex object, then creating unit tests could be worthwhile. But for now, YAGNI
