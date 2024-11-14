@@ -54,7 +54,7 @@ class BankAccountSpec extends Specification {
 
     then: "I get an error"
     def e = thrown(IllegalStateException)
-    e.message == "Bank account cannot be closed while client has unsatisfied obligations"
+    e.message == "Unsatisfied obligations exist."
   }
 
   def "can be deposited"() {
@@ -127,7 +127,7 @@ class BankAccountSpec extends Specification {
 
     then: "I get an error"
     def e = thrown(IllegalStateException)
-    e.message == "Not enough funds available on your account."
+    e.message == "Insufficient funds."
   }
 
   def "cannot be withdrawn when daily limit exceeded"() {

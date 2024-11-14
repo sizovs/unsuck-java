@@ -24,7 +24,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
   enum Status {
     NEW,
     OPEN,
-    SUSPENDED,
     CLOSED
   }
 
@@ -69,11 +68,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
     publish(new BankAccountOpened(iban, today()));
   }
 
-  public void suspend() {
-    checkState(!this.status.equals(Status.SUSPENDED), "Bank account is already suspended");
-    this.status = Status.SUSPENDED;
-  }
-
   public void lift(WithdrawalLimits newLimits) {
     checkArgument(newLimits.areGreaterOrEqualTo(withdrawalLimits), "New limits should be greater or equal to the current limits");
     this.withdrawalLimits = newLimits;
@@ -85,7 +79,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     var tx = Transaction.withdrawalOf(amount);
     transactions.add(tx);
 
-    checkState(balance().signum() >= 0, "Not enough funds available on your account.");
+    checkState(balance().signum() >= 0, "Insufficient funds.");
     checkState(isWithinMonthlyLimit(), "Monthly withdrawal limit reached.");
     checkState(isWithinDailyLimit(), "Daily withdrawal limit reached.");
 
@@ -101,7 +95,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     return !monthlyLimitReached;
   }
 
-  BigDecimal withdrawn(Month month) {
+  private BigDecimal withdrawn(Month month) {
     return StreamEx.of(transactions)
       .filter(tx -> tx.isBookedIn(month))
       .filter(tx -> tx.isWithdrawal())
@@ -146,9 +140,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
   }
 
   public void close(UnsatisfiedObligations unsatisfiedObligations) {
-    checkState(
-      !unsatisfiedObligations.exist(clientId),
-      "Bank account cannot be closed while client has unsatisfied obligations");
+    checkState(!unsatisfiedObligations.exist(clientId), "Unsatisfied obligations exist.");
     status = Status.CLOSED;
   }
 
