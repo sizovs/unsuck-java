@@ -50,4 +50,4 @@ Unit tests target a specific code unit—a domain object, a controller, a reposi
 
 For example, `BankAccount` is an ideal candidate for unit testing because it’s a self-contained unit that consolidates non-trivial logic and invariants. Testing these in isolation provides a faster safety net and turns the test into an executable specification for that unit. It’s a useful, low-overhead, addition to the test suite.
 
-On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes a more complex object, then creating unit tests could be worthwhile. But for now, YAGNI
+On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes an object, then creating unit tests could be worthwhile. But for now, YAGNI
