@@ -49,7 +49,7 @@ Unit tests target a specific code unit—a domain object, a controller, a reposi
 
 For example, `BankAccount` is an ideal candidate for unit testing because it’s a self-contained unit that consolidates non-trivial logic and invariants. Testing these in isolation provides a faster safety net and turns the test into an executable specification for that unit. It’s a useful, low-overhead, addition to the test suite.
 
-On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes an object, then creating unit tests could be worthwhile. But for now, YAGNI
+On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s already covered by E2E tests). If Client later gains behavior and becomes an object, then creating unit tests could be worthwhile. But for now, YAGNI.
 
 I don’t buy into the "fully isolated unit tests" craze that leads to over-mocking and fragile, useless tests. A repository is better tested via an in-memory database. A controller is better tested through WebMVC to verify (de)serialization and exception handling. A class that interacts with the file system should use an in-memory file system (e.g., Jimfs). A class that sends emails via SMTP should use an in-memory SMTP server (e.g., GreenMail). A class that interacts with an external system should use a test double (e.g., WireMock). A domain object, if well-designed, can usually be tested in full isolation without running Spring.
 
