@@ -38,4 +38,4 @@ Cool things:
 1. E2E tests don't reuse data classes (commands and responses) making tests more robust. If you rename a field in data structure, essentially breaking an API, a test should fail, not pass.
 1. E2E tests are designed to run in parallel (thanks to Faker) using in-memory H2, eliminating DB truncation / context dirtying / rollbacks.
 1. E2E tests use realistic transaction(s), like a normal app. It doesn't run in a single transaction tx that spans the whole test (forcing commands to join that single tx, which is a source of bugs, because IRL every command runs in its own tx).
-1. H2 supports some advanced SQL features (such as SKIP LOCKED, which we rely on to implement a DB-backed queue).If your app relies on Postgres functionality, you can isolate these tests and run them against real Postgres (using Postgres Templates or TestContainers).
+1. H2 supports some advanced SQL features (such as SKIP LOCKED, which we rely on to implement a DB-backed queue). If your app relies on Postgres functionality, you can isolate these tests and run them against real Postgres (using Postgres Templates or TestContainers).
