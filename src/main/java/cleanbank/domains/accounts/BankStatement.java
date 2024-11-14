@@ -18,10 +18,10 @@ class BankStatement {
   private final BalanceSnapshot closingBalance;
   private final BalanceSnapshot startingBalance;
 
-  BankStatement(LocalDate fromInclusive, LocalDate toInclusive, Collection<Transaction> transactions) {
+  BankStatement(LocalDate fromInclusive, LocalDate toInclusive, Collection<BankAccount.Transaction> transactions) {
     var startingBalance = StreamEx.of(transactions)
       .filter(tx -> tx.isBookedBefore(fromInclusive))
-      .foldRight(BigDecimal.ZERO, Transaction::apply);
+      .foldRight(BigDecimal.ZERO, BankAccount.Transaction::apply);
 
     var closingBalance = StreamEx.of(transactions)
       .filter(tx -> tx.isBookedDuring(fromInclusive, toInclusive))
