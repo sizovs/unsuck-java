@@ -16,14 +16,13 @@ class Correlable implements Now {
 
   @Override
   public <C extends Command<R>, R> R execute(C command) {
-    var MDC_KEY = "ccid";
-    var closeable = MDC.putCloseable(MDC_KEY, next());
-    try (closeable) {
+    var withCid = MDC.putCloseable("cid", nextCid());
+    try (withCid) {
       return origin.execute(command);
     }
   }
 
-  private String next() {
+  private String nextCid() {
     return String.valueOf(counter.incrementAndGet() % 1000);
   }
 }
