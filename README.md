@@ -54,3 +54,5 @@ On the other hand, unit-testing `Client` doesn’t add value, as it’s just a d
 I don’t buy into the "fully isolated unit tests" craze that leads to over-mocking and fragile, useless tests. A repository is better tested via an in-memory database. A controller is better tested through WebMVC to verify (de)serialization and exception handling. A class that interacts with the file system should use an in-memory file system (e.g., Jimfs). A class that sends emails via SMTP should use an in-memory SMTP server (e.g., GreenMail). A class that interacts with an external system should use a test double (e.g., WireMock). A domain object, if well-designed, can usually be tested in full isolation without running Spring.
 
 Write **valuable tests**. Valuable tests are worth optimizing. Optimize them by buying better hardware, parallelization, ditching low-value tests. It’s better to have fewer valuable tests than many useless tests.
+
+P.S. Whether you test first or test last doesn't matter. What matters is good design paired with good tests. How you get there is up to you.
