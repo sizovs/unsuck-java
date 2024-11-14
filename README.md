@@ -30,7 +30,7 @@ Some cool things worth checking out:
 1. `ValidatorSpec` - data-driven tests
 1. `DataSpec` - equals() and hashcode() tests
 1. `ArchitectureSpec` - architectural constraints
-
+1. `MockMvcExtensions` - extends MockMvc with convenience methods
 
 All other tests are end-to-end, covering the application from Web API to database. This approach is far more valuable than having numerous unit tests per use case (controller, command, reaction, entities, repository...) that neither ensure functionality nor provide a safety net for internal restructuring. We create a beautiful E2E testing API around Web API to make tests more awesome.
 See `BankAccountE2ESpec` and `IpRateLimitingE2ESpec`.
