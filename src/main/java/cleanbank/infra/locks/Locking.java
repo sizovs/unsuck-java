@@ -68,7 +68,7 @@ public class Locking {
 
         private static final Map<Integer, ReentrantLock> locks = new HashMap<>();
 
-        public static void pg_advisory_lock(int lockId) {
+        public static void acquire(int lockId) {
           var lock = locks.computeIfAbsent(lockId, key -> new ReentrantLock());
           lock.lock();
         }
