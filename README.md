@@ -51,7 +51,7 @@ More awesomeness:
    own tx).
 1. H2 supports some advanced SQL features (such as SKIP LOCKED, which we rely on to implement a DB-backed queue). If
    your app relies on Postgres functionality, you can isolate these tests and run them against real Postgres (using
-   Postgres Templates or TestContainers). Alternatively, you can simulate some of the advanced PostgreSQL functionality (like pg_notify() or pg_advisory_lock()) in H2. While this won’t be completely foolproof, as your local app will behave slightly differently, it’s a worthwhile trade-off that enables you to leverage an embedded database as much as possible for testing and local development.
+   Postgres Templates or TestContainers). Alternatively, you can simulate some of the advanced PostgreSQL functionality (like pg_notify() or pg_advisory_lock()) in H2. While this won’t be completely bulletproof, as your local app will behave slightly differently, it’s a worthwhile trade-off that enables you to leverage an embedded database as much as possible for testing and local development.
 
 ### A note on testing strategy
 
