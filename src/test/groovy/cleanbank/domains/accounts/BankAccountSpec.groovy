@@ -3,8 +3,6 @@ package cleanbank.domains.accounts
 
 import cleanbank.infra.time.TimeMachine
 import net.datafaker.Faker
-import org.skyscreamer.jsonassert.JSONAssert
-import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.util.time.MutableClock
@@ -234,7 +232,7 @@ class BankAccountSpec extends Specification {
                    }
                 """
 
-    JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT)
+    assert expected.json() == actual.json()
   }
 
 }

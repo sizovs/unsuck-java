@@ -1,4 +1,4 @@
-package cleanbank.e2e.commons
+package cleanbank.infra
 
 import groovy.json.JsonSlurper
 import org.springframework.mock.web.MockHttpServletResponse
@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static groovy.json.JsonOutput.toJson
 import static org.springframework.http.MediaType.APPLICATION_JSON
 
-class MockMvcExtensions {
+class UsefulTestExtensions {
 
   static MockHttpServletRequestBuilder json(MockHttpServletRequestBuilder builder, Map jsonAttributes) {
     builder.contentType(APPLICATION_JSON)
@@ -15,7 +15,11 @@ class MockMvcExtensions {
   }
 
   static <T> T json(MockHttpServletResponse self) {
-    new JsonSlurper().parseText(self.getContentAsString()) as T
+    return json(self.getContentAsString())
+  }
+
+  static <T> T json(String self) {
+    new JsonSlurper().parseText(self) as T
   }
 
 }
