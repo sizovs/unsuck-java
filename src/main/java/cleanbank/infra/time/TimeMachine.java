@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class TimeMachine {
 
-  private static final ThreadLocal<Clock> clock = ThreadLocal.withInitial(Clock::systemUTC);
+  private static final ThreadLocal<Clock> clock = InheritableThreadLocal.withInitial(Clock::systemUTC);
 
   private static Clock clock() {
     return clock.get();
