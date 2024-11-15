@@ -29,10 +29,9 @@ Some cool things worth checking out:
 1. `BankAccountSpec` – looks like an executable specification (⌘ + F12 to see the test list).
 1. `BankAccountPersistenceAndLockingSpec` - demonstrates the importance of optimistic locking.
 1. `ValidatorSpec` - data-driven tests
-1. `DataSpec` - equals() and hashcode() tests
 1. `ArchitectureSpec` - architectural constraints
 1. `MockMvcExtensions` - extends MockMvc with convenience methods
-1. `TimeMachine` is thread-local, allowing per-test time manipulation.
+1. `TimeMachine` - thread-local, allowing per-test time manipulation.
 
 All other tests are end-to-end, covering the application from Web API to database. This approach is far more valuable
 than having numerous unit tests per use case (controller, command, reaction, entities, repository...) that neither
