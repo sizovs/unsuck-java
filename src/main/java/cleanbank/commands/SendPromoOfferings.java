@@ -13,7 +13,8 @@ public class SendPromoOfferings implements Command<Command.Void> {
 
     @Override
     public Void react(SendPromoOfferings cmd) {
-      return null;
+      System.out.println("Sending a bunch of spam");
+      return new Void();
     }
   }
 
