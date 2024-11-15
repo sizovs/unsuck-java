@@ -37,27 +37,8 @@ public class Locking {
     void release(String taskId);
   }
 
-  @Component
-  @ConditionalOnClass(name = "org.h2.Driver")
-  static class InMemoryLock implements Lock {
-
-    private final Map<String, ReentrantLock> locks = new HashMap<>();
-
-    @Override
-    public void acquire(String taskId) {
-      var lock = locks.computeIfAbsent(taskId, key -> new ReentrantLock());
-      lock.lock();
-    }
-
-    @Override
-    public void release(String taskId) {
-      var lock = locks.get(taskId);
-      lock.unlock();
-    }
-  }
 
   @Component
-  @ConditionalOnClass(name = "org.postgresql.Driver")
   static class AdvisoryLock implements Lock {
 
     private final JdbcTemplate db;
@@ -67,11 +48,36 @@ public class Locking {
     }
 
     public void acquire(String taskId) {
-      db.update("SELECT pg_advisory_lock(?)", taskId.hashCode());
+      db.execute("SELECT pg_advisory_lock(%s)".formatted(taskId.hashCode()));
     }
 
     public void release(String taskId) {
-      db.update("SELECT pg_advisory_unlock(?)", taskId.hashCode());
+      db.execute("SELECT pg_advisory_unlock(%s)".formatted(taskId.hashCode()));
+    }
+
+    @Component
+    @ConditionalOnClass(name = "org.h2.Driver")
+    public static class Emulator {
+
+      Emulator(JdbcTemplate db) {
+        db.update("CREATE ALIAS pg_advisory_lock FOR \"%s.acquire\"".formatted(InMemoryLock.class.getName()));
+        db.update("CREATE ALIAS pg_advisory_unlock FOR \"%s.release\"".formatted(InMemoryLock.class.getName()));
+      }
+
+      public static class InMemoryLock {
+
+        private static final Map<Integer, ReentrantLock> locks = new HashMap<>();
+
+        public static void pg_advisory_lock(int lockId) {
+          var lock = locks.computeIfAbsent(lockId, key -> new ReentrantLock());
+          lock.lock();
+        }
+
+        public static void release(int lockId) {
+          var lock = locks.get(lockId);
+          lock.unlock();
+        }
+      }
     }
   }
 }
