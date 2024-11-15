@@ -1,5 +1,6 @@
 package cleanbank.infra.locks;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -59,24 +60,27 @@ public class Locking {
     @ConditionalOnClass(name = "org.h2.Driver")
     public static class Emulator {
 
+      private static final Map<Integer, ReentrantLock> locks = new HashMap<>();
+      private final JdbcTemplate db;
+
       Emulator(JdbcTemplate db) {
-        db.update("CREATE ALIAS pg_advisory_lock FOR \"%s.acquire\"".formatted(InMemoryLock.class.getName()));
-        db.update("CREATE ALIAS pg_advisory_unlock FOR \"%s.release\"".formatted(InMemoryLock.class.getName()));
+        this.db = db;
       }
 
-      public static class InMemoryLock {
+      @PostConstruct
+      public void setup() {
+        db.update("CREATE ALIAS pg_advisory_lock FOR \"%s.acquire\"".formatted(Emulator.class.getName()));
+        db.update("CREATE ALIAS pg_advisory_unlock FOR \"%s.release\"".formatted(Emulator.class.getName()));
+      }
 
-        private static final Map<Integer, ReentrantLock> locks = new HashMap<>();
+      public static void acquire(int lockId) {
+        var lock = locks.computeIfAbsent(lockId, key -> new ReentrantLock());
+        lock.lock();
+      }
 
-        public static void acquire(int lockId) {
-          var lock = locks.computeIfAbsent(lockId, key -> new ReentrantLock());
-          lock.lock();
-        }
-
-        public static void release(int lockId) {
-          var lock = locks.get(lockId);
-          lock.unlock();
-        }
+      public static void release(int lockId) {
+        var lock = locks.get(lockId);
+        lock.unlock();
       }
     }
   }
