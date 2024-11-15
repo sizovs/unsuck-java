@@ -31,7 +31,7 @@ Some cool things worth checking out:
 1. `ValidatorSpec` - data-driven tests
 1. `ArchitectureSpec` - architectural constraints
 1. `UsefulTestExtensions` - adds convenience testing methods
-1. `TimeMachine` - thread-local, allowing per-test time manipulation.
+1. `TimeMachine` - thread-local clock, allowing per-test time manipulation.
 
 All other tests are end-to-end, covering the application from Web API to database. This approach is far more valuable
 than having numerous unit tests per use case (controller, command, reaction, entities, repository...) that neither
