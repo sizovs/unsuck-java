@@ -42,7 +42,7 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
           nested
             .define(cmd::iban, Iban::isValid, "iban must be valid")
             .define(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
-        ).enforce(cmd);
+        ).enforce();
 
       var iban = new Iban(cmd.iban(), ibanUniqueness);
       var account = new BankAccount(iban, cmd.clientId, withdrawalLimits);

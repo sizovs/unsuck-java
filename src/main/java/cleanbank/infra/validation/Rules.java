@@ -23,17 +23,17 @@ public class Rules<R> {
     return this;
   }
 
-  public void enforce(R root) {
-    var violations = check(root);
+  public void enforce() {
+    var violations = check();
     if (!violations.isEmpty()) {
       throw new Violations(violations);
     }
   }
 
-  private List<String> check(R root) {
+  private List<String> check() {
     return rules
       .stream()
-      .flatMap(rule -> rule.violations(root).stream())
+      .flatMap(rule -> rule.violations().stream())
       .toList();
   }
 
@@ -54,7 +54,7 @@ public class Rules<R> {
   }
 
   private interface Rule<R> {
-    Collection<String> violations(R entity);
+    Collection<String> violations();
   }
 
   private class AttributeRule<V> implements Rule<R> {
@@ -74,13 +74,13 @@ public class Rules<R> {
     }
 
     @Override
-    public Collection<String> violations(R root) {
+    public Collection<String> violations() {
       var attr = this.getter.get();
       var truthy = this.check.test(attr);
       if (!truthy) {
         return singletonList(message.formatted(attr));
       } else {
-        return this.nestedRules.check(root);
+        return this.nestedRules.check();
       }
     }
   }

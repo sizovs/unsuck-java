@@ -31,7 +31,7 @@ public record RegisterAsClient(
         .define(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")
         .define(cmd::lastName, StringUtils::isNotEmpty, "lastName must not be empty")
         .define(cmd::email, StringUtils::isNotEmpty, "email must not be empty")
-        .enforce(cmd);
+        .enforce();
 
       var client = new Client(cmd.personalId(), cmd.firstName(), cmd.lastName(), cmd.email());
       clients.add(client);
