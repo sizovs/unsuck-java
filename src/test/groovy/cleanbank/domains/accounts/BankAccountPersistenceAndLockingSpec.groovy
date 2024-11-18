@@ -8,7 +8,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   @Autowired
   BankAccounts accounts
 
-  def iban = faker.finance().iban("EE")
+  String iban = faker.finance().iban("EE")
 
   @Override
   def setupTransactional() {
@@ -16,7 +16,6 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
     def clientId = UUID.randomUUID()
     def limits = new WithdrawalLimits(100.00, 1000.00)
     def account = new BankAccount(iban, clientId, limits)
-    account.open()
     accounts.add(account)
   }
 
@@ -25,15 +24,15 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   }
 
   def "I should not override someone else's successful commit"() {
-    when: "I am trying to suspend a bank account, while someone has successfully closed the account"
+    when: "I am trying to open a bank account, while someone has successfully closed the account"
     whileOngoing {
-      account().suspend()
+      account().open()
     }
     someoneCommits {
       account().close(UnsatisfiedObligations.NONE)
     }
 
-    then: "After we've both done, the account should remain closed"
+    then: "After we've both done, the account should be closed"
     afterAll {
       account().isClosed()
     }
@@ -43,9 +42,9 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   def "I should not partially override someone else's successful commit"() {
     def newLimits = new WithdrawalLimits(10000.00, 1000000.00)
 
-    when: "I am trying to suspend a bank account, while someone has closed the account and lifted limits"
+    when: "I am trying to open a bank account, while someone has closed the account and lifted limits"
     whileOngoing {
-      account().suspend()
+      account().open()
     }
     someoneCommits {
       account().lift(newLimits)
@@ -59,8 +58,9 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   }
 
   def "I should not break aggregate root's invariants"() {
-    given: "Bank account has some cash"
+    given: "Bank account is open and has some cash"
     transactional {
+      account().open()
       account().deposit(1000.00)
     }
 
@@ -81,6 +81,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   def "Transactions should be ordered by insertion order"() {
     when: "I save a bunch of transactions"
     transactional {
+      account().open()
       account().deposit(1.00)
       account().deposit(2.00)
       account().deposit(3.00)
