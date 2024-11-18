@@ -6,7 +6,7 @@ spring:
     properties:
       hibernate:
         show_sql: false
-      javax:
+      jakarta:
         persistence:
           validation:
             mode: none
