@@ -15,9 +15,9 @@ class RulesSpec extends Specification {
     when:
     def bean = new Bean(name, country)
     rules
-      .with(bean::name, StringUtils::isNotEmpty, "Name is empty")
-      .with(bean::country, StringUtils::isNotEmpty, "Country is empty", nested ->
-        nested.with(bean::country, StringUtils::isAllUpperCase, "Country '%s' must be uppercase"))
+      .define(bean::name, StringUtils::isNotEmpty, "Name is empty")
+      .define(bean::country, StringUtils::isNotEmpty, "Country is empty", nested ->
+        nested.define(bean::country, StringUtils::isAllUpperCase, "Country '%s' must be uppercase"))
       .enforce(bean)
 
     then:
@@ -35,7 +35,7 @@ class RulesSpec extends Specification {
   def "stays silent if all rules pass"() {
     when:
     rules
-      .with(String::toString, StringUtils::isNotEmpty, "This will always pass")
+      .define(String::toString, StringUtils::isNotEmpty, "This will always pass")
       .enforce("not empty string")
 
     then:

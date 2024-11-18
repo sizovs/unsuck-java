@@ -37,11 +37,11 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
     @Override
     public Void react(ApplyForBankAccount cmd) {
       new Rules<ApplyForBankAccount>()
-        .with(cmd::clientId, ObjectUtils::allNotNull, "clientId must not be empty")
-        .with(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", nested ->
+        .define(cmd::clientId, ObjectUtils::allNotNull, "clientId must not be empty")
+        .define(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", nested ->
           nested
-            .with(cmd::iban, Iban::isValid, "iban must be valid")
-            .with(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
+            .define(cmd::iban, Iban::isValid, "iban must be valid")
+            .define(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
         ).enforce(cmd);
 
       var iban = new Iban(cmd.iban(), ibanUniqueness);

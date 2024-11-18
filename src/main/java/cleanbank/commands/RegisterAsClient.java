@@ -27,10 +27,10 @@ public record RegisterAsClient(
     @Override
     public UUID react(RegisterAsClient cmd) {
       new Rules<RegisterAsClient>()
-        .with(cmd::personalId, StringUtils::isNotEmpty, "personalId must not be empty")
-        .with(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")
-        .with(cmd::lastName, StringUtils::isNotEmpty, "lastName must not be empty")
-        .with(cmd::email, StringUtils::isNotEmpty, "email must not be empty")
+        .define(cmd::personalId, StringUtils::isNotEmpty, "personalId must not be empty")
+        .define(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")
+        .define(cmd::lastName, StringUtils::isNotEmpty, "lastName must not be empty")
+        .define(cmd::email, StringUtils::isNotEmpty, "email must not be empty")
         .enforce(cmd);
 
       var client = new Client(cmd.personalId(), cmd.firstName(), cmd.lastName(), cmd.email());

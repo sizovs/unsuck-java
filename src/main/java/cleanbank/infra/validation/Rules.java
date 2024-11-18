@@ -12,11 +12,11 @@ public class Rules<R> {
 
   private final List<Rule<R>> rules = new ArrayList<>();
 
-  public <T> Rules<R> with(Supplier<T> getter, Predicate<T> check, String message) {
-    return with(getter, check, message, NestedRules.absent());
+  public <T> Rules<R> define(Supplier<T> getter, Predicate<T> check, String message) {
+    return define(getter, check, message, NestedRules.absent());
   }
 
-  public <T> Rules<R> with(Supplier<T> getter, Predicate<T> check, String message, NestedRules<R> nested) {
+  public <T> Rules<R> define(Supplier<T> getter, Predicate<T> check, String message, NestedRules<R> nested) {
     var rule = new AttributeRule<>(getter, check, message);
     rules.add(rule);
     rule.with(nested.rules());
@@ -40,14 +40,15 @@ public class Rules<R> {
   public interface NestedRules<R> {
 
     static <T> NestedRules<T> absent() {
-      return rules -> {};
+      return rules -> {
+      };
     }
 
-    void applyTo(Rules<R> rules);
+    void define(Rules<R> rules);
 
     default Rules<R> rules() {
       var rules = new Rules<R>();
-      applyTo(rules);
+      define(rules);
       return rules;
     }
   }
