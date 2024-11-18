@@ -1,22 +1,19 @@
 package cleanbank.infra.validation;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static java.util.Collections.singletonList;
+public class Rules {
 
-public class Rules<R> {
+  private final List<Rule> rules = new ArrayList<>();
 
-  private final List<Rule<R>> rules = new ArrayList<>();
-
-  public <T> Rules<R> define(Supplier<T> getter, Predicate<T> check, String message) {
+  public <T> Rules define(Supplier<T> getter, Predicate<T> check, String message) {
     return define(getter, check, message, NestedRules.absent());
   }
 
-  public <T> Rules<R> define(Supplier<T> getter, Predicate<T> check, String message, NestedRules<R> nested) {
+  public <T> Rules define(Supplier<T> getter, Predicate<T> check, String message, NestedRules nested) {
     var rule = new AttributeRule<>(getter, check, message);
     rules.add(rule);
     rule.with(nested.rules());
@@ -24,44 +21,44 @@ public class Rules<R> {
   }
 
   public void enforce() {
-    var violations = check();
+    var violations = violations();
     if (!violations.isEmpty()) {
       throw new Violations(violations);
     }
   }
 
-  private List<String> check() {
+  private List<String> violations() {
     return rules
       .stream()
       .flatMap(rule -> rule.violations().stream())
       .toList();
   }
 
-  public interface NestedRules<R> {
+  public interface NestedRules {
 
-    static <T> NestedRules<T> absent() {
+    static NestedRules absent() {
       return rules -> {
       };
     }
 
-    void define(Rules<R> rules);
+    void define(Rules rules);
 
-    default Rules<R> rules() {
-      var rules = new Rules<R>();
+    default Rules rules() {
+      var rules = new Rules();
       define(rules);
       return rules;
     }
   }
 
-  private interface Rule<R> {
-    Collection<String> violations();
+  private interface Rule {
+    List<String> violations();
   }
 
-  private class AttributeRule<V> implements Rule<R> {
+  private static class AttributeRule<V> implements Rule {
     private final Supplier<V> getter;
     private final Predicate<V> check;
     private final String message;
-    private Rules<R> nestedRules = new Rules<>();
+    private Rules nestedRules = new Rules();
 
     AttributeRule(Supplier<V> getter, Predicate<V> check, String message) {
       this.getter = getter;
@@ -69,18 +66,18 @@ public class Rules<R> {
       this.message = message;
     }
 
-    void with(Rules<R> rules) {
+    void with(Rules rules) {
       this.nestedRules = rules;
     }
 
     @Override
-    public Collection<String> violations() {
+    public List<String> violations() {
       var attr = this.getter.get();
       var truthy = this.check.test(attr);
       if (!truthy) {
-        return singletonList(message.formatted(attr));
+        return List.of(message.formatted(attr));
       } else {
-        return this.nestedRules.check();
+        return this.nestedRules.violations();
       }
     }
   }

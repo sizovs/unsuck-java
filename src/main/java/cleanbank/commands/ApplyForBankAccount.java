@@ -36,7 +36,7 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
 
     @Override
     public Void react(ApplyForBankAccount cmd) {
-      new Rules<ApplyForBankAccount>()
+      new Rules()
         .define(cmd::clientId, ObjectUtils::allNotNull, "clientId must not be empty")
         .define(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", nested ->
           nested

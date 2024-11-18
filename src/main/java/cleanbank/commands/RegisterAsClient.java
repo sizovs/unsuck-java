@@ -26,7 +26,7 @@ public record RegisterAsClient(
 
     @Override
     public UUID react(RegisterAsClient cmd) {
-      new Rules<RegisterAsClient>()
+      new Rules()
         .define(cmd::personalId, StringUtils::isNotEmpty, "personalId must not be empty")
         .define(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")
         .define(cmd::lastName, StringUtils::isNotEmpty, "lastName must not be empty")
