@@ -16,8 +16,8 @@ class RulesSpec extends Specification {
     def bean = new Bean(name, country)
     rules
       .define(bean::name, StringUtils::isNotEmpty, "Name is empty")
-      .define(bean::country, StringUtils::isNotEmpty, "Country is empty", nested ->
-        nested.define(bean::country, StringUtils::isAllUpperCase, "Country '%s' must be uppercase"))
+      .define(bean::country, StringUtils::isNotEmpty, "Country is empty", new Rules()
+        .define(bean::country, StringUtils::isAllUpperCase, "Country '%s' must be uppercase"))
       .enforce()
 
     then:

@@ -38,10 +38,9 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
     public Void react(ApplyForBankAccount cmd) {
       new Rules()
         .define(cmd::clientId, ObjectUtils::allNotNull, "clientId must not be empty")
-        .define(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", nested ->
-          nested
-            .define(cmd::iban, Iban::isValid, "iban must be valid")
-            .define(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
+        .define(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", new Rules()
+          .define(cmd::iban, Iban::isValid, "iban must be valid")
+          .define(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
         ).enforce();
 
       var iban = new Iban(cmd.iban(), ibanUniqueness);

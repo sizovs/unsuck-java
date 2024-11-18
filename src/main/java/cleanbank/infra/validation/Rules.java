@@ -10,13 +10,15 @@ public class Rules {
   private final List<Rule> rules = new ArrayList<>();
 
   public <T> Rules define(Supplier<T> getter, Predicate<T> check, String message) {
-    return define(getter, check, message, NestedRules.absent());
-  }
-
-  public <T> Rules define(Supplier<T> getter, Predicate<T> check, String message, NestedRules nested) {
     var rule = new AttributeRule<>(getter, check, message);
     rules.add(rule);
-    rule.with(nested.rules());
+    return this;
+  }
+
+  public <T> Rules define(Supplier<T> getter, Predicate<T> check, String message, Rules nestedRules) {
+    var rule = new AttributeRule<>(getter, check, message);
+    rules.add(rule);
+    rule.with(nestedRules);
     return this;
   }
 
@@ -32,22 +34,6 @@ public class Rules {
       .stream()
       .flatMap(rule -> rule.violations().stream())
       .toList();
-  }
-
-  public interface NestedRules {
-
-    static NestedRules absent() {
-      return rules -> {
-      };
-    }
-
-    void define(Rules rules);
-
-    default Rules rules() {
-      var rules = new Rules();
-      define(rules);
-      return rules;
-    }
   }
 
   private interface Rule {
@@ -66,8 +52,8 @@ public class Rules {
       this.message = message;
     }
 
-    void with(Rules rules) {
-      this.nestedRules = rules;
+    void with(Rules nestedRules) {
+      this.nestedRules = nestedRules;
     }
 
     @Override
