@@ -35,7 +35,7 @@ public class RateLimiting implements Now {
       .map(this::bucket)
       .ifPresent(bucket -> {
         if (!bucket.tryConsume(1)) {
-          throw new RateLimitException();
+          throw new TooManyRequests();
         }
       });
 
@@ -48,8 +48,8 @@ public class RateLimiting implements Now {
     return buckets.get(bandwidth.getId(), id -> Bucket.builder().addLimit(bandwidth).build());
   }
 
-  public static class RateLimitException extends RuntimeException {
-    RateLimitException() {
+  public static class TooManyRequests extends RuntimeException {
+    TooManyRequests() {
       super("Rate limit has been reached");
     }
   }

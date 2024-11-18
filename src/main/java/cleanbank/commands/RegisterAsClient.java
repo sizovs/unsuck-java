@@ -4,7 +4,7 @@ import cleanbank.domains.crm.Client;
 import cleanbank.domains.crm.Clients;
 import cleanbank.infra.pipeline.Command;
 import cleanbank.infra.spring.annotations.PrototypeScoped;
-import cleanbank.infra.validation.Validator;
+import cleanbank.infra.validation.Rules;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -26,12 +26,12 @@ public record RegisterAsClient(
 
     @Override
     public UUID react(RegisterAsClient cmd) {
-      new Validator<RegisterAsClient>()
+      new Rules<RegisterAsClient>()
         .with(cmd::personalId, StringUtils::isNotEmpty, "personalId must not be empty")
         .with(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")
         .with(cmd::lastName, StringUtils::isNotEmpty, "lastName must not be empty")
         .with(cmd::email, StringUtils::isNotEmpty, "email must not be empty")
-        .check(cmd);
+        .enforce(cmd);
 
       var client = new Client(cmd.personalId(), cmd.firstName(), cmd.lastName(), cmd.email());
       clients.add(client);

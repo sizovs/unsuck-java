@@ -9,7 +9,7 @@ import cleanbank.infra.mail.Postman;
 import cleanbank.infra.pipeline.Command;
 import cleanbank.infra.pipeline.Command.Void;
 import cleanbank.infra.spring.annotations.PrototypeScoped;
-import cleanbank.infra.validation.Validator;
+import cleanbank.infra.validation.Rules;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.mail.SimpleMailMessage;
@@ -36,13 +36,13 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
 
     @Override
     public Void react(ApplyForBankAccount cmd) {
-      new Validator<ApplyForBankAccount>()
+      new Rules<ApplyForBankAccount>()
         .with(cmd::clientId, ObjectUtils::allNotNull, "clientId must not be empty")
         .with(cmd::iban, StringUtils::isNotEmpty, "iban must not be empty", nested ->
           nested
             .with(cmd::iban, Iban::isValid, "iban must be valid")
             .with(cmd::iban, ibanUniqueness::guaranteed, "iban is already taken")
-        ).check(cmd);
+        ).enforce(cmd);
 
       var iban = new Iban(cmd.iban(), ibanUniqueness);
       var account = new BankAccount(iban, cmd.clientId, withdrawalLimits);

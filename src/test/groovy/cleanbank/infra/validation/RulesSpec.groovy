@@ -4,39 +4,39 @@ import org.apache.commons.lang3.StringUtils
 import spock.lang.Specification
 import spock.lang.Subject
 
-class ValidatorSpec extends Specification {
+class RulesSpec extends Specification {
 
   static record Bean(String name, String country) {}
 
   @Subject
-  def validator = new Validator()
+  def rules = new Rules()
 
-  def "throws exception with all validation errors in rule declaration order"() {
+  def "throws violations in rule declaration order"() {
     when:
     def bean = new Bean(name, country)
-    validator
+    rules
       .with(bean::name, StringUtils::isNotEmpty, "Name is empty")
       .with(bean::country, StringUtils::isNotEmpty, "Country is empty", nested ->
-        nested.with(bean::country, StringUtils::isAllUpperCase, "Country must be uppercase"))
-      .check(bean)
+        nested.with(bean::country, StringUtils::isAllUpperCase, "Country '%s' must be uppercase"))
+      .enforce(bean)
 
     then:
-    def e = thrown(Validator.ValidationException)
-    e.violations() == errors
+    def e = thrown(Rules.Violations)
+    e.violations() == violations
 
     where:
-    name | country || errors
+    name | country || violations
     ""   | ""      || ["Name is empty", "Country is empty"]
     ""   | "US"    || ["Name is empty"]
     "Ed" | ""      || ["Country is empty"]
-    "Ed" | "us"    || ["Country must be uppercase"]
+    "Ed" | "us"    || ["Country 'us' must be uppercase"]
   }
 
-  def "doesn't throw if validation passes"() {
+  def "stays silent if all rules pass"() {
     when:
-    validator
+    rules
       .with(String::toString, StringUtils::isNotEmpty, "This will always pass")
-      .check("not empty string")
+      .enforce("not empty string")
 
     then:
     noExceptionThrown()
