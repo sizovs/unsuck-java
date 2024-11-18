@@ -13,13 +13,13 @@ public class Rules<R> {
   private final List<Rule<R>> rules = new ArrayList<>();
 
   public <T> Rules<R> with(Supplier<T> getter, Predicate<T> check, String message) {
-    return with(getter, check, message, new Nesting.Absent<>());
+    return with(getter, check, message, NestedRules.absent());
   }
 
-  public <T> Rules<R> with(Supplier<T> getter, Predicate<T> check, String message, Nesting<R> nested) {
+  public <T> Rules<R> with(Supplier<T> getter, Predicate<T> check, String message, NestedRules<R> nested) {
     var rule = new AttributeRule<>(getter, check, message);
-    rule.with(nested.rules());
     rules.add(rule);
+    rule.with(nested.rules());
     return this;
   }
 
@@ -37,12 +37,10 @@ public class Rules<R> {
       .toList();
   }
 
-  public interface Nesting<R> {
+  public interface NestedRules<R> {
 
-    class Absent<T> implements Nesting<T> {
-      @Override
-      public void applyTo(Rules<T> rules) {
-      }
+    static <T> NestedRules<T> absent() {
+      return rules -> {};
     }
 
     void applyTo(Rules<R> rules);
@@ -53,7 +51,6 @@ public class Rules<R> {
       return rules;
     }
   }
-
 
   private interface Rule<R> {
     Collection<String> violations(R entity);
