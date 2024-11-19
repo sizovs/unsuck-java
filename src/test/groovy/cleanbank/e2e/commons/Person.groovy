@@ -40,7 +40,7 @@ class Person implements MockMvcTrait {
   }
 
   def getsProfile() {
-    get("/clients/${clientId.get()}", [:]).json()
+    get("/clients/${clientId.get()}", [:])
   }
 
   def appliesForBankAccount(iban) {

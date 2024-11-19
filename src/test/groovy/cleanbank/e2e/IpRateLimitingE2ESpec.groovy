@@ -4,7 +4,7 @@ import cleanbank.e2e.commons.E2ESpec
 
 class IpRateLimitingE2ESpec extends E2ESpec {
 
-  def "allows maximum 60 requests per minute from a single ip"() {
+  def "maximum 60 requests per minute from a single ip"() {
     given:
     def someone = person()
     def someoneElse = person()
