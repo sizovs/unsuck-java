@@ -2,7 +2,7 @@ package cleanbank.e2e
 
 import cleanbank.e2e.commons.E2ESpec
 
-class IpRateLimitingE2ESpec extends E2ESpec {
+class IpRateLimitE2ESpec extends E2ESpec {
 
   def "maximum 60 requests per minute from a single ip"() {
     given:

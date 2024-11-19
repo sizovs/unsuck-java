@@ -1,6 +1,6 @@
 package cleanbank.infra.spring.mvc;
 
-import cleanbank.infra.pipeline.RateLimiting;
+import cleanbank.infra.pipeline.RateLimited;
 import cleanbank.infra.validation.Rules;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,9 +23,9 @@ public class WebExceptionHandler {
     return ex.violations();
   }
 
-  @ExceptionHandler(value = RateLimiting.TooManyRequests.class)
+  @ExceptionHandler(value = RateLimited.TooManyRequests.class)
   @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
-  public @ResponseBody List<String> handle(RateLimiting.TooManyRequests ex) {
+  public @ResponseBody List<String> handle(RateLimited.TooManyRequests ex) {
     return List.of(ex.getMessage());
   }
 }

@@ -9,7 +9,7 @@ import java.time.Duration;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class RateLimiting implements Now {
+public class RateLimited implements Now {
 
   private final Cache<String, Bucket> buckets = Caffeine.newBuilder()
     .expireAfterAccess(Duration.ofMinutes(15))
@@ -19,7 +19,7 @@ public class RateLimiting implements Now {
 
   private final Now origin;
 
-  RateLimiting(ObjectProvider<RateLimiter<Command<?>>> rateLimiters, Now origin) {
+  RateLimited(ObjectProvider<RateLimiter<Command<?>>> rateLimiters, Now origin) {
     this.rateLimiters = rateLimiters;
     this.origin = origin;
   }

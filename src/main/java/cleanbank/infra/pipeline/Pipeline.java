@@ -15,7 +15,7 @@ class Pipeline implements Now {
     this.pipeline =
       new Correlable(
         new Loggable(
-          new RateLimiting(rateLimiters,
+          new RateLimited(rateLimiters,
             new Transactional(txManager,
               new Reacting(reactions)
             )
