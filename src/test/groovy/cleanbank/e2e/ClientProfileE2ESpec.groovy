@@ -15,10 +15,11 @@ class ClientProfileE2ESpec extends E2ESpec {
     someone.getsProfile()
 
     then:
-    Map profile = someone.responses.last().json()
-    profile.email == someone.email
-    profile.firstName == someone.firstName
-    profile.lastName == someone.lastName
+    someone.responses.last().json() == [
+      email: someone.email,
+      firstName: someone.firstName,
+      lastName: someone.lastName
+    ]
   }
 
 
