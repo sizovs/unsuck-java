@@ -5,11 +5,11 @@ import cleanbank.infra.spring.annotations.PrototypeScoped;
 
 public class ClusterOnce<C extends Command<R>, R> implements Command<Command.Void> {
 
-  private final String taskId;
+  private final int lockId;
   private final C origin;
 
   public ClusterOnce(C origin) {
-    this.taskId = origin.getClass().getSimpleName();
+    this.lockId = origin.getClass().getSimpleName().hashCode();
     this.origin = origin;
   }
 
@@ -24,10 +24,9 @@ public class ClusterOnce<C extends Command<R>, R> implements Command<Command.Voi
 
     @Override
     public Void react(ClusterOnce<C, R> cmd) {
-      if (lock.acquire(cmd.taskId)) {
+      if (lock.acquire(cmd.lockId)) {
         cmd.origin.now();
       }
-
       return new Void();
     }
   }

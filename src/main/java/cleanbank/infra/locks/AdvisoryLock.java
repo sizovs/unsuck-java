@@ -25,8 +25,8 @@ public class AdvisoryLock {
     this.db = db;
   }
 
-  public boolean acquire(String taskId) {
-    var acquired = db.queryForObject("SELECT pg_try_advisory_xact_lock(?)", Boolean.class, taskId.hashCode());
+  public boolean acquire(int lockId) {
+    var acquired = db.queryForObject("SELECT pg_try_advisory_xact_lock(?)", Boolean.class, lockId);
     return Boolean.TRUE.equals(acquired);
   }
 
