@@ -11,7 +11,7 @@ import static com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping.NON_FINA
 import static com.machinezoo.noexception.Exceptions.wrap;
 
 @Entity
-class ScheduledCommand {
+class Job {
 
   @Id
   @GeneratedValue
@@ -19,14 +19,14 @@ class ScheduledCommand {
 
   private Command<?> command;
 
-  ScheduledCommand(Command<?> command) {
+  Job(Command<?> command) {
     this.command = command;
   }
 
-  private ScheduledCommand() {
+  private Job() {
   }
 
-  void now() {
+  void execute() {
     command.now();
   }
 
