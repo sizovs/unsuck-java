@@ -16,9 +16,9 @@ class ClientProfileE2ESpec extends E2ESpec {
 
     then:
     someone.responses.last().json() == [
-      email: someone.email,
+      email    : someone.email,
       firstName: someone.firstName,
-      lastName: someone.lastName
+      lastName : someone.lastName
     ]
   }
 

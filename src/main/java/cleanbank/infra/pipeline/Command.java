@@ -21,11 +21,12 @@ public interface Command<R> {
     default boolean matches(C command) {
       var commandTypeToken = new TypeToken<C>(getClass()) {
       };
-      return commandTypeToken.isSupertypeOf(command.getClass());
+      return commandTypeToken.getRawType().equals(command.getClass()) ||
+        commandTypeToken.isSupertypeOf(command.getClass());
     }
   }
 
   class Void {
-
   }
+
 }

@@ -54,7 +54,7 @@ More awesomeness:
    Postgres Templates or TestContainers). Alternatively, you can simulate some of the advanced PostgreSQL
    functionality (like pg_notify() or pg_advisory_lock()) in H2. While this won’t be completely bulletproof, as your
    local app will behave slightly differently, it’s a worthwhile trade-off that enables you to leverage an embedded
-   database as much as possible for testing and local development. Refer to `Locking.java` for an example.
+   database as much as possible for testing and local development. Refer to `AdvisoryLock.java` for an example.
 
 ### A note on testing strategy
 

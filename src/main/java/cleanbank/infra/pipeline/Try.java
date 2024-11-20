@@ -19,10 +19,6 @@ public class Try<C extends Command<R>, R> implements Command<R> {
     return this;
   }
 
-  public R now() {
-    return origin.now();
-  }
-
   @PrototypeScoped
   static class Reaction<C extends Command<R>, R> implements Command.Reaction<Try<C, R>, R> {
 
@@ -33,7 +29,7 @@ public class Try<C extends Command<R>, R> implements Command<R> {
       var template = new RetryTemplate();
       template.setRetryPolicy(retryPolicy);
 
-      return template.execute(context -> command.now());
+      return template.execute(context -> command.origin.now());
     }
   }
 
