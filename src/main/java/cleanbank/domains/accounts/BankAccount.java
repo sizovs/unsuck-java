@@ -42,7 +42,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
   private UUID clientId;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "BANK_ACCOUNT_IBAN")
+  @JoinColumn(name = "BANK_ACCOUNT_IBAN", nullable = false, updatable = false)
   @OrderBy("ID ASC")
   private List<Transaction> transactions = new ArrayList<>();
 
