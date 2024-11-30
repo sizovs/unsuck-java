@@ -59,13 +59,14 @@ public abstract class DomainEntity<T> {
   public boolean equals(Object other) {
     if (this == other) return true;
     if (other instanceof DomainEntity<?> that) {
-      return Objects.equals(this.id, that.id);
+      return Objects.equals(this.id(), that.id());
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id);
+    return Objects.hashCode(id());
   }
+
 }
