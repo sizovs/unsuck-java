@@ -10,7 +10,8 @@ public interface RateLimiter<C extends Command<?>> {
   default boolean matches(C command) {
     var commandTypeToken = new TypeToken<C>(getClass()) {
     };
-    return commandTypeToken.isSupertypeOf(command.getClass());
+    return commandTypeToken.getRawType().equals(command.getClass()) ||
+      commandTypeToken.isSupertypeOf(command.getClass());
   }
 
 
