@@ -84,7 +84,10 @@ e.g., Jimfs). A class that sends emails via SMTP should use an in-memory SMTP se
 interacts with an external system should use a test double (e.g., WireMock). A domain object, if well-designed, can
 usually be tested in full isolation without running Spring.
 
-**Write valuable tests**. Valuable tests are worth optimizing and fighting for. Design tests so they run in parallel; it doesn't happens automagically, and requires some careful craftsmanship. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just a few seconds. Ditch low-value tests. It’s better to have fewer valuable tests than many useless ones.
+**Write valuable tests**. Valuable tests are worth optimizing and fighting for.
+1. Design tests so they run in parallel; it doesn't happens automagically, and requires some careful craftsmanship.
+2. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just a few seconds.
+3. Ditch low-value tests. It’s better to have fewer valuable tests than many useless ones.
 
-P.S. Whether you test first or test last doesn't matter. What matters is good design paired with good tests. How you get
+And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you get
 there is up to you.
