@@ -55,7 +55,7 @@ More awesomeness:
    local app will behave slightly differently, it’s a worthwhile trade-off that enables you to leverage an embedded
    database as much as possible for testing and local development. Refer to `AdvisoryLock.java` for an example.
 
-### A note on testing strategy
+## A note on testing strategy
 
 My testing strategy is simple – E2E tests are mandatory, since the use cases our app provides via web api should be kept
 **stable**. Everything else is there to support the use-cases and is **volatile**; internals can and will regularly
@@ -92,7 +92,7 @@ usually be tested in full isolation without running Spring.
 And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you get
 there is up to you.
 
-## Where is Dockerfile?
+# Where is Dockerfile?
 
 Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
 
