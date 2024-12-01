@@ -31,7 +31,7 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
     Reaction(BankAccounts accounts, WithdrawalLimits withdrawalLimits) {
       this.accounts = accounts;
       this.withdrawalLimits = withdrawalLimits;
-      this.ibanUniqueness = once(accounts::isUniqueByIban)::apply;
+      this.ibanUniqueness = once(accounts::notExistsByIban)::apply;
     }
 
     @Override
