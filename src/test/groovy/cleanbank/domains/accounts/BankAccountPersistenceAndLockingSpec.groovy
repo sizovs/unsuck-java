@@ -23,11 +23,14 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
     accounts.findByIban(iban)
   }
 
+  // If you remove optimistic locking, the test will fail.
+  // Overriding the successful commit.
   def "I should not override someone else's successful commit"() {
-    when: "I am trying to open a bank account, while someone has successfully closed the account"
+    when: "I am trying to open a bank account"
     whileOngoing {
       account().open()
     }
+    and: ".. while someone else has successfully closed the account"
     someoneCommits {
       account().close(UnsatisfiedObligations.NONE)
     }
@@ -38,7 +41,35 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
     }
   }
 
-  // this test fails when you add @DynamicUpdate annotation to BankAccount while optimistic locking is off.
+  // If you remove optimistic locking, the test will fail.
+  // Withdrawing more (101$) than allowed by limit (100$)
+  def "I should not break aggregate root's invariants"() {
+    given: "Bank account is open and has some cash"
+    transactional {
+      account().open()
+      account().deposit(1000.00)
+    }
+    and:
+    account().withdrawalLimits().dailyLimit() == 100.00
+
+    when: "I am withdrawing maximum cash permitted by a daily limit"
+    whileOngoing {
+      account().withdraw(100.00)
+    }
+    and: "...meanwhile someone else has withdrawn another dollar"
+    someoneCommits {
+      account().withdraw(1.00)
+    }
+
+    then: "After we've all done, my balance should decrease by one dollar (no more than allowed by the daily limit)"
+    afterAll {
+      println account().balance()
+      account().balance() == 999.00
+    }
+  }
+
+  // If you remove optimistic locking, and add @DynamicUpdate annotation to BankAccount, the test will fail.
+  // Resulting in data mojito from two transactions – opened account and new limits.
   def "I should not partially override someone else's successful commit"() {
     def newLimits = new WithdrawalLimits(10000.00, 1000000.00)
 
@@ -57,27 +88,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
     }
   }
 
-  def "I should not break aggregate root's invariants"() {
-    given: "Bank account is open and has some cash"
-    transactional {
-      account().open()
-      account().deposit(1000.00)
-    }
-
-    when: "I am withdrawing maximum cash permitted by a daily limit. Meanwhile someone else has withdrawn another dollar"
-    whileOngoing {
-      account().withdraw(100.00)
-    }
-    someoneCommits {
-      account().withdraw(1.00)
-    }
-
-    then: "After we've all done, my balance should decrease by one dollar (no more than allowed by the daily limit)"
-    afterAll {
-      account().balance() == 999.00
-    }
-  }
-
+  // This is just to make sure transactions are ordered properly when read from the database.
   def "Transactions should be ordered by insertion order"() {
     when: "I save a bunch of transactions"
     transactional {
