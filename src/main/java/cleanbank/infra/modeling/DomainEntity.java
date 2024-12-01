@@ -7,11 +7,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @MappedSuperclass
@@ -22,12 +19,6 @@ public abstract class DomainEntity<T> {
 
   @Version
   private long version;
-
-  @CreatedDate
-  private LocalDateTime createdTime;
-
-  @LastModifiedDate
-  private LocalDateTime updatedTime;
 
   @Transient
   public final transient Collection<DomainEvent> publishedEvents = new ArrayList<>();
