@@ -34,7 +34,7 @@ Some cool things worth checking out:
 
 All other tests are end-to-end, covering the application from Web API to database. This approach is far more valuable
 than having numerous unit tests per use case (controller, command, reaction, entities, repository...) that neither
-ensure functionality nor provide a safety net for internal restructuring. We create a beautiful E2E testing API around
+ensure the app actually works nor provide a safety net for internal restructuring. We create a beautiful E2E testing API around
 Web API to make tests more awesome.
 See `BankAccountE2ESpec` and `IpRateLimitingE2ESpec`.
 
@@ -71,7 +71,7 @@ costs.
 
 For example, `BankAccount` is an ideal candidate for unit testing because it’s a self-contained unit that consolidates
 non-trivial logic and invariants. Testing these in isolation provides a faster safety net and turns the test into an
-executable specification for that unit. It’s a useful, low-overhead, addition to the test suite.
+executable specification for that unit. It’s a useful, low-overhead addition to the test suite.
 
 On the other hand, unit-testing `Client` doesn’t add value, as it’s just a data class with no logic (remember: it’s
 already covered by E2E tests). If Client later gains behavior and becomes an object, then creating unit tests could be
@@ -84,8 +84,7 @@ e.g., Jimfs). A class that sends emails via SMTP should use an in-memory SMTP se
 interacts with an external system should use a test double (e.g., WireMock). A domain object, if well-designed, can
 usually be tested in full isolation without running Spring.
 
-Write **valuable tests**. Valuable tests are worth optimizing. Optimize them by buying better hardware, parallelization,
-ditching low-value tests. It’s better to have fewer valuable tests than many useless tests.
+**Write valuable tests**. Valuable tests are worth optimizing and fighting for. Design tests so they run in parallel; it doesn't happens automagically, and requires some careful craftsmanship. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just a few seconds. Ditch low-value tests. It’s better to have fewer valuable tests than many useless ones.
 
 P.S. Whether you test first or test last doesn't matter. What matters is good design paired with good tests. How you get
 there is up to you.
