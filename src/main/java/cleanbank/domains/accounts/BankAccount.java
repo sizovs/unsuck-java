@@ -38,7 +38,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
   @Embedded
   private WithdrawalLimits withdrawalLimits;
 
-  @Column
   private UUID clientId;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

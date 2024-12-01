@@ -36,11 +36,4 @@ public class Client extends DomainEntity<Client> {
     return email;
   }
 
-  public String firstName() {
-    return firstName;
-  }
-
-  public String lastName() {
-    return lastName;
-  }
 }
