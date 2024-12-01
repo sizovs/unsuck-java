@@ -6,18 +6,17 @@ demonstrates some unique and practical coding techniques and patterns.
 ### Requirements
 
 - [x] Java 23+
-- [x] Gradle 8+
 
 #### How to run tests?
 
 ```
-gradle test
+./gradlew test
 ```
 
 #### How to run dev mode?
 
 ```
-gradle bootTestRun
+./gradlew bootTestRun
 ```
 
 # Testing
