@@ -30,7 +30,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
     whileOngoing {
       account().open()
     }
-    and: ".. while someone else has successfully closed the account"
+    and: "...meanwhile someone else has successfully closed the account"
     someoneCommits {
       account().close(UnsatisfiedObligations.NONE)
     }
@@ -73,10 +73,11 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
   def "I should not partially override someone else's successful commit"() {
     def newLimits = new WithdrawalLimits(10000.00, 1000000.00)
 
-    when: "I am trying to open a bank account, while someone has closed the account and lifted limits"
+    when: "I am trying to open a bank account"
     whileOngoing {
       account().open()
     }
+    and: "...meanwhile someone has closed the account and lifted limits"
     someoneCommits {
       account().lift(newLimits)
       account().close(UnsatisfiedObligations.NONE)
@@ -97,7 +98,7 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
       account().deposit(2.00)
       account().deposit(3.00)
     }
-    then: "Then should be read back in the same order"
+    then: "Transactions should be returned in the insertion order"
     transactional {
       account().transactions().collect { it.deposited() } == [1.00, 2.00, 3.00]
     }
