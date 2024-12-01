@@ -17,7 +17,7 @@ import org.springframework.mail.SimpleMailMessage;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static cleanbank.infra.fp.Memoization.once;
+import static cleanbank.infra.fp.Memoization.memoize;
 
 public record ApplyForBankAccount(UUID clientId, String iban) implements Command<Void> {
 
@@ -31,7 +31,7 @@ public record ApplyForBankAccount(UUID clientId, String iban) implements Command
     Reaction(BankAccounts accounts, WithdrawalLimits withdrawalLimits) {
       this.accounts = accounts;
       this.withdrawalLimits = withdrawalLimits;
-      this.ibanUniqueness = once(accounts::notExistsByIban)::apply;
+      this.ibanUniqueness = memoize(accounts::notExistsByIban)::once;
     }
 
     @Override
