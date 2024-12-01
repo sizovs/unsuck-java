@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static groovy.json.JsonOutput.toJson
 import static org.springframework.http.MediaType.APPLICATION_JSON
 
-class UsefulTestExtensions {
+class JsonExtensions {
 
   static MockHttpServletRequestBuilder json(MockHttpServletRequestBuilder builder, Map jsonAttributes) {
     builder.contentType(APPLICATION_JSON)
