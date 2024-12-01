@@ -91,3 +91,15 @@ usually be tested in full isolation without running Spring.
 
 And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you get
 there is up to you.
+
+## Where is Dockerfile?
+
+Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
+
+I intentionally didn’t add or mention Docker (or any extras besides JVM). TLDR:
+
+Simplicity, that everybody is pursuing in tech, comes via reduction, not addition. We should be fighting against adding extra things, but devs are quick to reject apparently bad things, yet “good” things tend to creep into setup, architecture, design, code, too easily. And then “good things” and all “extras” add up over time, making the whole thing more complex. As the saying goes – devs know the benefits of everything and the cost of nothing.
+
+So, I love to keep the setup Docker-free with fewer abstractions and moving parts. These days, devs often jump on the Docker bandwagon too early. Docker helps when setup is non-trivial or we have too many things to spin up (thanks to microservices craze). But, in this case, introducing Docker is like putting lipstick on a pig. Perhaps we should be cutting down the complexity, instead of containerizing it. In fact, staying Docker-free imposes a powerful architectural constraint, pushing us to harness the power of the JVM, which is already portable across machines, while keeping things simple, lightweight, and with fewer dependencies.
+
+This isn't a rebellion against Docker. It's a rebellion against using Docker without a good reason.
