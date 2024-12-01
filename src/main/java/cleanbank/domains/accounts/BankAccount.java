@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static cleanbank.domains.accounts.BankAccount.Transaction.Type.DEPOSIT;
+import static cleanbank.domains.accounts.BankAccount.Transaction.Type.WITHDRAWAL;
 import static cleanbank.infra.time.TimeMachine.today;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
@@ -77,7 +79,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
   public Transaction withdraw(BigDecimal amount) {
     checkState(isOpen(), "Account is not open.");
 
-    var tx = Transaction.withdrawalOf(amount);
+    var tx = new Transaction(WITHDRAWAL, amount);
     transactions.add(tx);
 
     checkState(balance().signum() >= 0, "Insufficient funds.");
@@ -121,7 +123,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
   public Transaction deposit(BigDecimal amount) {
     checkState(isOpen(), "Account is not open.");
 
-    var tx = Transaction.depositOf(amount);
+    var tx = new Transaction(DEPOSIT, amount);
     transactions.add(tx);
 
     return tx;
@@ -133,11 +135,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
 
   public BigDecimal balance() {
     return StreamEx.of(transactions).foldRight(BigDecimal.ZERO, Transaction::apply);
-  }
-
-  @VisibleForTesting
-  WithdrawalLimits withdrawalLimits() {
-    return withdrawalLimits;
   }
 
   public void close(UnsatisfiedObligations unsatisfiedObligations) {
@@ -153,6 +150,11 @@ public class BankAccount extends DomainEntity<BankAccount> {
     return status.equals(Status.CLOSED);
   }
 
+  @VisibleForTesting
+  WithdrawalLimits withdrawalLimits() {
+    return withdrawalLimits;
+  }
+
   @Entity
   public static class Transaction {
 
@@ -166,10 +168,10 @@ public class BankAccount extends DomainEntity<BankAccount> {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    private Transaction(Type type, BigDecimal amount, LocalDateTime bookingTime) {
+    private Transaction(Type type, BigDecimal amount) {
       this.type = type;
       this.amount = amount;
-      this.bookingTime = bookingTime;
+      this.bookingTime = TimeMachine.currentTime();
     }
 
     @VisibleForHibernate
@@ -185,7 +187,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     }
 
     boolean isWithdrawal() {
-      return type == Type.WITHDRAWAL;
+      return type == WITHDRAWAL;
     }
 
     public BigDecimal deposited() {
@@ -193,7 +195,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     }
 
     boolean isDeposit() {
-      return type == Type.DEPOSIT;
+      return type == DEPOSIT;
     }
 
     LocalDateTime bookingTime() {
@@ -215,14 +217,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
     boolean isBookedDuring(LocalDate fromInclusive, LocalDate toInclusive) {
       return bookingDate().isEqual(fromInclusive) || bookingDate().isEqual(toInclusive)
         || (bookingDate().isAfter(fromInclusive) && bookingDate().isBefore(toInclusive));
-    }
-
-    static Transaction withdrawalOf(BigDecimal amount) {
-      return new Transaction(Type.WITHDRAWAL, amount, TimeMachine.currentTime());
-    }
-
-    static Transaction depositOf(BigDecimal amount) {
-      return new Transaction(Type.DEPOSIT, amount, TimeMachine.currentTime());
     }
 
     enum Type {
