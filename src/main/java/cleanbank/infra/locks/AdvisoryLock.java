@@ -25,7 +25,7 @@ public class AdvisoryLock {
     this.db = db;
   }
 
-  public boolean acquire(int lockId) {
+  public boolean tryAcquire(int lockId) {
     var acquired = db.queryForObject("SELECT pg_try_advisory_xact_lock(?)", Boolean.class, lockId);
     return Boolean.TRUE.equals(acquired);
   }
@@ -44,10 +44,10 @@ public class AdvisoryLock {
 
     @PostConstruct
     public void setup() {
-      db.execute("CREATE ALIAS pg_try_advisory_xact_lock FOR \"%s.acquire\"".formatted(Emulator.class.getName()));
+      db.execute("CREATE ALIAS pg_try_advisory_xact_lock FOR \"%s.tryAcquire\"".formatted(Emulator.class.getName()));
     }
 
-    public static boolean acquire(int lockId) {
+    public static boolean tryAcquire(int lockId) {
       var lock = locks.computeIfAbsent(lockId, key -> new ReentrantLock());
       var acquired = lock.tryLock();
       releaseAfterTxCompletion(lock);

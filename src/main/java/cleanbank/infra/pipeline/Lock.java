@@ -24,7 +24,7 @@ public class Lock<C extends Command<R>, R> implements Command<Command.Void> {
 
     @Override
     public Void react(Lock<C, R> cmd) {
-      if (lock.acquire(cmd.lockId)) {
+      if (lock.tryAcquire(cmd.lockId)) {
         cmd.origin.now();
       }
       return new Void();
