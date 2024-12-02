@@ -69,10 +69,10 @@ test {
     testDurations.put name, ms
   }
   doLast {
-    println "🐌 Slowest tests (the first slowest test is likely the one that loads the Spring Context):"
+    println "🐌 Slowest tests (the slowest test(s) are likely the ones that load the Spring Context):"
     testDurations
       .sort { -it.value }
-      .take(3)
+      .take(5)
       .each { println "${it.value}ms: $it.key" }
   }
 }
