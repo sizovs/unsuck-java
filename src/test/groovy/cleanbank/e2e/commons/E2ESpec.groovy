@@ -13,7 +13,7 @@ import spock.util.concurrent.PollingConditions
 @AutoConfigureMockMvc
 abstract class E2ESpec extends Specification {
 
-  private def polling = new PollingConditions(timeout: 10, delay: 1)
+  private def polling = new PollingConditions(timeout: 10, delay: 0.25)
 
   @Autowired
   protected MockMvc mvc

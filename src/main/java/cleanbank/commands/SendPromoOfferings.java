@@ -1,7 +1,7 @@
 package cleanbank.commands;
 
-import cleanbank.infra.pipeline.Lock;
 import cleanbank.infra.pipeline.Command;
+import cleanbank.infra.pipeline.Lock;
 import cleanbank.infra.spring.annotations.PrototypeScoped;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

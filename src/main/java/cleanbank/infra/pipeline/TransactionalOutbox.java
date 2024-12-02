@@ -19,7 +19,7 @@ class TransactionalOutbox implements Later {
   }
 
   @Transactional
-  @Scheduled(initialDelay = 5000, fixedDelay = 5000)
+  @Scheduled(fixedRate = 500)
   public void runPeriodically() {
     jobs.next().ifPresent(job -> {
       job.execute();

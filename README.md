@@ -34,7 +34,8 @@ Some cool things worth checking out:
 
 All other tests are end-to-end, covering the application from Web API to database. This approach is far more valuable
 than having numerous unit tests per use case (controller, command, reaction, entities, repository...) that neither
-ensure the app actually works nor provide a safety net for internal restructuring. We create a beautiful E2E testing API around
+ensure the app actually works nor provide a safety net for internal restructuring. We create a beautiful E2E testing API
+around
 Web API to make tests more awesome.
 See `BankAccountE2ESpec` and `IpRateLimitingE2ESpec`.
 
@@ -85,21 +86,33 @@ interacts with an external system should use a test double (e.g., WireMock). A d
 usually be tested in full isolation without running Spring.
 
 **Write valuable tests**. Valuable tests are worth optimizing and fighting for.
+
 1. Design tests so they run in parallel; it doesn't happens automagically, and requires some careful craftsmanship.
-2. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just a few seconds.
+2. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just
+   a few seconds.
 3. Ditch low-value tests. It’s better to have fewer valuable tests than many useless ones.
 
-And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you get
+And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you
+get
 there is up to you.
 
 # Where is Dockerfile?
 
-Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
+Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions
+with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
 
 I intentionally didn’t add or mention Docker (or any extras besides JVM). TLDR:
 
-Simplicity, that everybody is pursuing in tech, comes via reduction, not addition. We should be fighting against adding extra things, but devs are quick to reject apparently bad things, yet “good” things tend to creep into setup, architecture, design, code, too easily. And then “good things” and all “extras” add up over time, making the whole thing more complex. As the saying goes – devs know the benefits of everything and the cost of nothing.
+Simplicity, that everybody is pursuing in tech, comes via reduction, not addition. We should be fighting against adding
+extra things, but devs are quick to reject apparently bad things, yet “good” things tend to creep into setup,
+architecture, design, code, too easily. And then “good things” and all “extras” add up over time, making the whole thing
+more complex. As the saying goes – devs know the benefits of everything and the cost of nothing.
 
-So, I love to keep the setup Docker-free with fewer abstractions and moving parts. These days, devs often jump on the Docker bandwagon too early. Docker helps when setup is non-trivial or we have too many things to spin up (thanks to microservices craze). But, in this case, introducing Docker is like putting lipstick on a pig. Perhaps we should be cutting down the complexity, instead of containerizing it. We should be fixing the root cause, not symptoms. In fact, staying Docker-free imposes a powerful architectural constraint, pushing us to harness the power of the JVM, which is already portable across machines, while keeping things simple, lightweight, and with fewer dependencies.
+So, I love to keep the setup Docker-free with fewer abstractions and moving parts. These days, devs often jump on the
+Docker bandwagon too early. Docker helps when setup is non-trivial or we have too many things to spin up (thanks to
+microservices craze). But, in this case, introducing Docker is like putting lipstick on a pig. Perhaps we should be
+cutting down the complexity, instead of containerizing it. We should be fixing the root cause, not symptoms. In fact,
+staying Docker-free imposes a powerful architectural constraint, pushing us to harness the power of the JVM, which is
+already portable across machines, while keeping things simple, lightweight, and with fewer dependencies.
 
 This isn't a rebellion against Docker. It's a rebellion against using Docker without a good reason.

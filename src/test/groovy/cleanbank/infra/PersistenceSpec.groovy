@@ -72,4 +72,5 @@ abstract class PersistenceSpec extends Specification {
     transactional(work)
   }
 
+
 }

@@ -103,5 +103,4 @@ class BankAccountPersistenceAndLockingSpec extends PersistenceSpec {
       account().transactions().collect { it.deposited() } == [1.00, 2.00, 3.00]
     }
   }
-
 }
