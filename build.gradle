@@ -69,7 +69,7 @@ test {
     testDurations.put name, ms
   }
   doLast {
-    println("🐌 Slowest tests:")
+    println "🐌 Slowest tests (the first slowest test is likely the one that loads the Spring Context):"
     testDurations
       .sort { -it.value }
       .take(3)
