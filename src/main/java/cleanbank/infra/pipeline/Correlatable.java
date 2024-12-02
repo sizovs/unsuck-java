@@ -4,13 +4,13 @@ import org.slf4j.MDC;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-class Correlable implements Now {
+class Correlatable implements Now {
 
   private final AtomicLong counter = new AtomicLong();
 
   private final Now origin;
 
-  Correlable(Now origin) {
+  Correlatable(Now origin) {
     this.origin = origin;
   }
 

@@ -13,7 +13,7 @@ class Pipeline implements Now {
   @SuppressWarnings("rawtypes")
   Pipeline(PlatformTransactionManager txManager, ObjectProvider<Reaction> reactions, ObjectProvider<RateLimiter<Command<?>>> rateLimiters) {
     this.pipeline =
-      new Correlable(
+      new Correlatable(
         new Loggable(
           new RateLimited(rateLimiters,
             new Transactional(txManager,
