@@ -44,6 +44,7 @@ dependencies {
   testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
   testImplementation 'org.apache.groovy:groovy:4.0.23'
   testImplementation 'org.apache.groovy:groovy-json:4.0.23'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 java {
@@ -54,6 +55,9 @@ java {
 
 test {
   useJUnitPlatform()
+  testLogging {
+    events "passed", "failed"
+  }
 }
 
 
