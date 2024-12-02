@@ -53,10 +53,25 @@ java {
   }
 }
 
+
 test {
+  def testDurations = [:]
+
   useJUnitPlatform()
   testLogging {
     events "passed", "failed"
+  }
+  afterTest { descriptor, result ->
+    def name = "${descriptor.className} > ${descriptor.name}" as String
+    def ms = result.endTime - result.startTime
+    testDurations.put name, ms
+  }
+  doLast {
+    println("🐌 Slowest tests:")
+    testDurations
+      .sort { -it.value }
+      .take(3)
+      .each { println "${it.value}ms: $it.key" }
   }
 }
 
