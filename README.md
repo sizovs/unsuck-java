@@ -88,8 +88,7 @@ usually be tested in full isolation without running Spring.
 **Write valuable tests**. Valuable tests are worth optimizing and fighting for.
 
 1. Design tests so they run in parallel; it doesn't happens automagically, and requires some careful craftsmanship.
-2. Buy modern hardware. The latest  Macbooks can do incredible things; running hundreds of good tests can now take just
-   a few seconds.
+2. Buy modern hardware. My  My M4 Max runs an average E2E test in 30ms, achieving 33 tests/second or 500 tests/15 seconds on a single core. With 14 cores, it can run 7,000 tests in 15 seconds. 10 years ago, no one could have dreamed of this.
 3. Ditch low-value tests. It’s better to have fewer valuable tests than many useless ones.
 
 And it doesn't matter whether you test first or test-last. What matters is good design paired with good tests. How you
@@ -100,7 +99,7 @@ there is up to you.
 
 Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions
 with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
-
+****
 I intentionally didn’t add or mention Docker (or any extras besides JVM). TLDR:
 
 Simplicity, that everybody is pursuing in tech, comes via reduction, not addition. We should be fighting against adding
