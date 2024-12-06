@@ -35,7 +35,6 @@ class MultimappingSpec extends PersistenceSpec {
       it.message.contains('select') &&
         it.message.contains('test_multimapping')
     }
-    then:
     selects.size() === 2
   }
 
