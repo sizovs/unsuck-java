@@ -20,7 +20,10 @@ demonstrates some unique and practical coding techniques and patterns.
 ```
 
 ### How to run via IDE
-Open IDEA -> Find DevApplication.groovy ->
+
+```
+Open IDEA -> Find DevApplication.groovy -> Run
+```
 
 # Testing
 
