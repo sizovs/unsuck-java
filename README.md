@@ -22,7 +22,7 @@ demonstrates some unique and practical coding techniques and patterns.
 #### How to run via IDE?
 
 ```
-Find DevApplication.groovy -> Run
+Open IDE -> Find DevApplication.groovy -> Run
 ```
 
 # Testing
