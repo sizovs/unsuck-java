@@ -30,8 +30,8 @@ class ClientsPersistenceSpec extends PersistenceSpec {
       clients.findByNaturalId(personalId)
     }
     def selects = logs.findAll {
-      it.message.contains('select')
-      it.message.contains('personal_id=?')
+      it.message.contains('select') &&
+        it.message.contains('personal_id=?')
     }
     then:
     selects.size() === 1
