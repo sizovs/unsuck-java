@@ -19,6 +19,9 @@ demonstrates some unique and practical coding techniques and patterns.
 ./gradlew bootTestRun
 ```
 
+### How to run via IDE
+Open IDEA -> Find DevApplication.groovy ->
+
 # Testing
 
 Some cool things worth checking out:
