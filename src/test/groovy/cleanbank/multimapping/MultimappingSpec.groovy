@@ -16,8 +16,8 @@ class MultimappingSpec extends PersistenceSpec {
 
   def "with multimapping, each entity is cached separately"() {
     given:
-    def foo = new Foo(foo: "A")
-    def bar = new Bar(bar: "A")
+    def foo = new Foo()
+    def bar = new Bar()
     transactional {
       em.persist(foo)
       em.persist(bar)
@@ -47,13 +47,13 @@ class MultimappingSpec extends PersistenceSpec {
   @Entity
   @Table(name = "TEST_MULTIMAPPING")
   static class Foo extends Superclass {
-    private String foo;
+    private String foo = "foo"
   }
 
   @Entity
   @Table(name = "TEST_MULTIMAPPING")
   static class Bar extends Superclass {
-    private String bar;
+    private String bar = "bar"
   }
 
 }
