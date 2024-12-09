@@ -15,12 +15,12 @@ class WebApi {
     applyForBankAccount.now();
   }
 
-  @PostMapping(value = "/clients")
+  @PostMapping("/clients")
   UUID post(@RequestBody RegisterAsClient register) {
     return register.now();
   }
 
-  @GetMapping(value = "/clients/{id}")
+  @GetMapping("/clients/{id}")
   GetClientProfile.Profile post(@PathVariable UUID id) {
     var getClientProfile = new GetClientProfile(id);
     return getClientProfile.now();
