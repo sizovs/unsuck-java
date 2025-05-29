@@ -5,7 +5,7 @@ demonstrates some unique and practical coding techniques and patterns.
 
 ### Requirements
 
-- [x] Java 23+
+- [x] Java 24+
 
 #### How to run tests?
 
@@ -105,7 +105,7 @@ there is up to you.
 
 # Where is Dockerfile?
 
-Java 23 is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions
+JDK installed is a portable and reasonable common denominator for onboarding. You can easily switch between JDK versions
 with [SDKMAN](https://sdkman.io/). Then Open IDE -> Import -> Run 🎉.
 ****
 I intentionally didn’t add or mention Docker (or any extras besides JVM). TLDR:

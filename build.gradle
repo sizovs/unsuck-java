@@ -31,7 +31,7 @@ dependencies {
   implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
   implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
   implementation 'com.bucket4j:bucket4j-core:8.10.1'
-  implementation "com.google.guava:guava:33.2.1-jre"
+  implementation "com.google.guava:guava:33.4.5-jre"
   implementation("commons-validator:commons-validator:1.9.0") {
     exclude module: "commons-logging"
   }
@@ -43,16 +43,16 @@ dependencies {
   testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
   testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
   testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
-  testImplementation 'org.apache.groovy:groovy:4.0.23'
-  testImplementation 'org.apache.groovy:groovy-json:4.0.23'
-  testImplementation 'com.google.guava:guava-testlib:33.3.1-jre'
+  testImplementation 'org.apache.groovy:groovy:4.0.24'
+  testImplementation 'org.apache.groovy:groovy-json:4.0.24'
+  testImplementation 'com.google.guava:guava-testlib:33.4.5-jre'
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(23)
+    languageVersion = JavaLanguageVersion.of(24)
   }
 }
 
