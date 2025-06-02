@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-// Here we map app exceptions to the web api errors
-// Could have been replaced with
-// https://github.com/zalando/problem and
-// https://github.com/zalando/problem-spring-web
 @ControllerAdvice
 public class WebExceptionHandler {
 

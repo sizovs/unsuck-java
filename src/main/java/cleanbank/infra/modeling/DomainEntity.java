@@ -38,7 +38,7 @@ public abstract class DomainEntity<T> {
   }
 
   @SuppressWarnings("unchecked")
-  public boolean $(Specification<T> specification) {
+  public boolean satisfies(Specification<T> specification) {
     return specification.isSatisfiedBy((T) this);
   }
 

@@ -10,7 +10,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Embeddable
 public class Iban extends Data {
 
-  private String iban;
+  private String value;
 
   @VisibleForHibernate
   private Iban() {
@@ -19,7 +19,7 @@ public class Iban extends Data {
   public Iban(String iban, Uniqueness uniqueness) {
     checkArgument(isValid(iban), "Iban %s doesn't conform to IBAN spec", iban);
     checkArgument(uniqueness.guaranteed(iban), "Iban %s is already taken", iban);
-    this.iban = iban;
+    this.value = iban;
   }
 
   public static boolean isValid(String iban) {
@@ -28,7 +28,7 @@ public class Iban extends Data {
 
   @Override
   public String toString() {
-    return iban;
+    return value;
   }
 
   public interface Uniqueness {

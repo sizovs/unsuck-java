@@ -22,8 +22,7 @@ class WebApi {
 
   @GetMapping("/clients/{id}")
   GetClientProfile.Profile post(@PathVariable UUID id) {
-    var getClientProfile = new GetClientProfile(id);
-    return getClientProfile.now();
+    return new GetClientProfile(id).now();
   }
 
 }
