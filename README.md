@@ -25,6 +25,11 @@ demonstrates some unique and practical coding techniques and patterns.
 Open IDE -> Find DevApplication.groovy -> Run
 ```
 
+#### How to see outdated dependencies?
+```
+  ./gradlew dependencyUpdates
+```
+
 # Testing
 
 Some cool things worth checking out:
