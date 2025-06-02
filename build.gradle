@@ -2,7 +2,7 @@ plugins {
   id 'java'
   id 'groovy'
   id 'application'
-  id 'org.springframework.boot' version '3.4.0'
+  id 'org.springframework.boot' version '3.5.0'
 }
 
 apply plugin: 'idea'
