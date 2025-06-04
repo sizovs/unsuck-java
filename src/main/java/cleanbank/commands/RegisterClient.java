@@ -9,14 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 
-public record RegisterAsClient(
+public record RegisterClient(
   String personalId,
   String firstName,
   String lastName,
   String email) implements Command<UUID> {
 
   @PrototypeScoped
-  static class Reaction implements Command.Reaction<RegisterAsClient, UUID> {
+  static class Reaction implements Command.Reaction<RegisterClient, UUID> {
 
     private final Clients clients;
 
@@ -25,7 +25,7 @@ public record RegisterAsClient(
     }
 
     @Override
-    public UUID react(RegisterAsClient cmd) {
+    public UUID react(RegisterClient cmd) {
       new Rules()
         .define(cmd::personalId, StringUtils::isNotEmpty, "personalId must not be empty")
         .define(cmd::firstName, StringUtils::isNotEmpty, "firstName must not be empty")

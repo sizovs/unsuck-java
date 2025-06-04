@@ -2,7 +2,7 @@ package cleanbank;
 
 import cleanbank.commands.ApplyForBankAccount;
 import cleanbank.commands.GetClientProfile;
-import cleanbank.commands.RegisterAsClient;
+import cleanbank.commands.RegisterClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,7 +16,7 @@ class WebApi {
   }
 
   @PostMapping("/clients")
-  UUID post(@RequestBody RegisterAsClient register) {
+  UUID post(@RequestBody RegisterClient register) {
     return register.now();
   }
 
