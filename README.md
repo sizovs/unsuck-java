@@ -27,7 +27,7 @@ Open IDE -> Find DevApplication.groovy -> Run
 
 #### How to see outdated dependencies?
 ```
-  ./gradlew dependencyUpdates
+./gradlew dependencyUpdates
 ```
 
 # Testing
