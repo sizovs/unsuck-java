@@ -38,7 +38,7 @@ Some cool things worth checking out:
 1. `BankAccountSpec` – no dependencies other than on itself except some stable infra code. Signals a good test.
 1. `BankAccountSpec` – looks like an executable specification (⌘ + F12 to see the test list).
 1. `BankAccountPersistenceAndLockingSpec` - demonstrates the importance of optimistic locking.
-1. `ValidatorSpec` - data-driven tests
+1. `RulesSpec` - data-driven tests
 1. `ArchitectureSpec` - architectural constraints
 1. `JsonExtensions` - adds convenience testing methods
 1. `TimeMachine` - thread-local clock, allowing per-test time manipulation.
