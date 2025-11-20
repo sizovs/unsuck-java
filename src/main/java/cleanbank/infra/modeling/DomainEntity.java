@@ -1,7 +1,7 @@
 package cleanbank.infra.modeling;
 
 import cleanbank.infra.modeling.DomainEvent.Broadcast;
-import com.github.f4b6a3.ulid.UlidCreator;
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
@@ -15,7 +15,7 @@ import java.util.*;
 public abstract class DomainEntity<T> {
 
   @Id
-  private UUID id = UlidCreator.getUlid().toUuid();
+  private UUID id = UuidCreator.getTimeOrderedEpoch();
 
   @Version
   private long version;
