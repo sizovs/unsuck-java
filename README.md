@@ -5,7 +5,7 @@ demonstrates some unique and practical coding techniques and patterns.
 
 ### Requirements
 
-- [x] Java 24+
+- [x] Java 25+
 
 #### How to run tests?
 
