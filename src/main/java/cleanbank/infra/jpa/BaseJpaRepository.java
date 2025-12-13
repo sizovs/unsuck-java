@@ -19,15 +19,15 @@ public class BaseJpaRepository<T, ID> extends SimpleJpaRepository<T, ID> {
 
   @NonNull
   @Deprecated
-  public <S extends T> S save(@NonNull S entity) {
+  public <S extends T> S save(S entity) {
     throw new UnsupportedOperationException("save() method is not supported. Use add() instead");
   }
 
-  public <S extends T> void add(@NonNull S entity) {
+  public <S extends T> void add(S entity) {
     em.persist(entity);
   }
 
-  public <NID> Optional<T> findByNaturalId(@NonNull NID naturalId) {
+  public <NID> Optional<T> findByNaturalId(NID naturalId) {
     return em
       .unwrap(Session.class)
       .bySimpleNaturalId(this.getDomainClass())

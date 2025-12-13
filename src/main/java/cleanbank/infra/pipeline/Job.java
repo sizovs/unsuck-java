@@ -1,5 +1,6 @@
 package cleanbank.infra.pipeline;
 
+import cleanbank.infra.modeling.VisibleForHibernate;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import tools.jackson.databind.json.JsonMapper;
@@ -18,6 +19,7 @@ class Job {
     this.command = command;
   }
 
+  @VisibleForHibernate
   private Job() {
   }
 
