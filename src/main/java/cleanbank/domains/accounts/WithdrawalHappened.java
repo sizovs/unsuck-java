@@ -2,5 +2,7 @@ package cleanbank.domains.accounts;
 
 import cleanbank.infra.modeling.DomainEvent;
 
-record WithdrawalHappened(Iban iban, BankAccount.Transaction tx) implements DomainEvent {
+import java.math.BigDecimal;
+
+record WithdrawalHappened(Iban iban, BigDecimal amount) implements DomainEvent {
 }

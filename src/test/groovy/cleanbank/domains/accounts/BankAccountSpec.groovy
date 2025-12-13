@@ -86,7 +86,7 @@ class BankAccountSpec extends Specification {
     tx.isWithdrawal()
     tx.withdrawn() == 100.00
     tx.deposited() == 0.00
-    account.publishedEvents.any { it == new WithdrawalHappened(account.iban(), tx) }
+    account.publishedEvents.any { it == new WithdrawalHappened(account.iban(), 100.00) }
   }
 
   def "cannot be withdrawn when closed"() {

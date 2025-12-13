@@ -86,7 +86,7 @@ public class BankAccount extends DomainEntity<BankAccount> {
     checkState(isWithinMonthlyLimit(), "Monthly withdrawal limit reached.");
     checkState(isWithinDailyLimit(), "Daily withdrawal limit reached.");
 
-    publish(new WithdrawalHappened(iban, tx));
+    publish(new WithdrawalHappened(iban, tx.amount));
 
     return tx;
   }
