@@ -33,7 +33,7 @@ dependencies {
   implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
   implementation 'com.bucket4j:bucket4j-core:8.10.1'
   implementation "com.google.guava:guava:33.4.8-jre"
-  implementation("commons-validator:commons-validator:1.9.0") {
+  implementation("commons-validator:commons-validator:1.10.1") {
     exclude module: "commons-logging"
   }
 
