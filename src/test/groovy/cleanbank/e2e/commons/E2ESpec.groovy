@@ -3,8 +3,8 @@ package cleanbank.e2e.commons
 import cleanbank.infra.mail.Postman
 import net.datafaker.Faker
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions

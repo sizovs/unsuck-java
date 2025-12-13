@@ -2,7 +2,7 @@ plugins {
   id 'java'
   id 'groovy'
   id 'application'
-  id 'org.springframework.boot' version '3.5.0'
+  id 'org.springframework.boot' version '4.0.0'
   id "com.github.ben-manes.versions" version "0.52.0"
 }
 
@@ -24,7 +24,7 @@ dependencies {
   implementation 'com.machinezoo.noexception:noexception:1.9.1'
   implementation 'one.util:streamex:0.8.3'
   implementation "org.apache.commons:commons-lang3:3.18.0"
-  implementation "org.springframework.retry:spring-retry"
+  implementation "org.springframework.retry:spring-retry:2.0.12"
   implementation "org.springframework.boot:spring-boot-starter-web"
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -42,6 +42,9 @@ dependencies {
   testImplementation 'com.tngtech.archunit:archunit:1.4.1'
   testImplementation "org.springframework.boot:spring-boot-test"
   testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
+  testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
+  testImplementation "org.springframework.boot:spring-boot-starter-webmvc-test"
+
   testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
   testImplementation 'org.spockframework:spock-spring:2.4-M6-groovy-4.0'
   testImplementation 'org.apache.groovy:groovy:4.0.28'

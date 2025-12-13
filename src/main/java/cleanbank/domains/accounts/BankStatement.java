@@ -1,7 +1,7 @@
 package cleanbank.domains.accounts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import one.util.streamex.StreamEx;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,7 +37,7 @@ class BankStatement {
   }
 
   public String json() {
-    var root = new ObjectMapper().createObjectNode();
+    var root = new JsonMapper().createObjectNode();
 
     root.putObject("startingBalance")
       .put("amount", startingBalance.balance)
