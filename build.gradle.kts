@@ -84,5 +84,26 @@ tasks.withType<Test>().configureEach {
   }
 }
 
+tasks.register("generatePackageInfo") {
+  val sourceDir = file("src/main/java/cleanbank")
+  doLast {
+    sourceDir.walkTopDown().filter { it.isDirectory }.forEach { dir ->
+      val packageInfo = File(dir, "package-info.java")
+      if (!packageInfo.exists()) {
+        val packageName = dir.relativeTo(sourceDir).path.replace(File.separatorChar, '.')
+        packageInfo.writeText(
+          """
+          @org.jspecify.annotations.NullMarked
+          package $packageName;
+          """.trimIndent()
+        )
+      }
+    }
+  }
+}
+
+tasks.named("compileJava") {
+  dependsOn("generatePackageInfo")
+}
 
 
