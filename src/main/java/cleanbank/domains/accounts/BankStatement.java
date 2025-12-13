@@ -1,6 +1,7 @@
 package cleanbank.domains.accounts;
 
 import one.util.streamex.StreamEx;
+import org.threeten.extra.LocalDateRange;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
@@ -18,13 +19,13 @@ class BankStatement {
   private final BalanceSnapshot closingBalance;
   private final BalanceSnapshot startingBalance;
 
-  BankStatement(LocalDate fromInclusive, LocalDate toInclusive, Collection<BankAccount.Transaction> transactions) {
+  BankStatement(LocalDateRange period, Collection<BankAccount.Transaction> transactions) {
     var startingBalance = StreamEx.of(transactions)
-      .filter(tx -> tx.isBookedBefore(fromInclusive))
+      .filter(tx -> tx.isBookedBefore(period.getStart()))
       .foldRight(BigDecimal.ZERO, BankAccount.Transaction::apply);
 
     var closingBalance = StreamEx.of(transactions)
-      .filter(tx -> tx.isBookedDuring(fromInclusive, toInclusive))
+      .filter(tx -> period.contains(tx.bookingDate()))
       .foldLeft(startingBalance, (balance, tx) -> {
         var newBalance = tx.apply(balance);
         var newEntry = new Entry(tx.bookingTime(), tx.withdrawn(), tx.deposited(), newBalance);
@@ -32,8 +33,8 @@ class BankStatement {
         return newBalance;
       });
 
-    this.startingBalance = new BalanceSnapshot(startingBalance, fromInclusive);
-    this.closingBalance = new BalanceSnapshot(closingBalance, toInclusive);
+    this.startingBalance = new BalanceSnapshot(startingBalance, period.getStart());
+    this.closingBalance = new BalanceSnapshot(closingBalance, period.getEndInclusive());
   }
 
   public String json() {

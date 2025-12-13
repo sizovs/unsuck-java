@@ -7,6 +7,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import jakarta.persistence.*;
 import one.util.streamex.StreamEx;
+import org.threeten.extra.LocalDateRange;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -129,8 +130,8 @@ public class BankAccount extends DomainEntity<BankAccount> {
     return tx;
   }
 
-  public BankStatement statement(LocalDate fromInclusive, LocalDate toInclusive) {
-    return new BankStatement(fromInclusive, toInclusive, transactions);
+  public BankStatement statement(LocalDateRange period) {
+    return new BankStatement(period, transactions);
   }
 
   public BigDecimal balance() {
@@ -198,14 +199,6 @@ public class BankAccount extends DomainEntity<BankAccount> {
       return type == DEPOSIT;
     }
 
-    LocalDateTime bookingTime() {
-      return bookingTime;
-    }
-
-    LocalDate bookingDate() {
-      return bookingTime.toLocalDate();
-    }
-
     boolean isBookedIn(Month month) {
       return bookingDate().getMonth().equals(month);
     }
@@ -214,9 +207,12 @@ public class BankAccount extends DomainEntity<BankAccount> {
       return bookingDate().isBefore(dateExclusive);
     }
 
-    boolean isBookedDuring(LocalDate fromInclusive, LocalDate toInclusive) {
-      return bookingDate().isEqual(fromInclusive) || bookingDate().isEqual(toInclusive)
-        || (bookingDate().isAfter(fromInclusive) && bookingDate().isBefore(toInclusive));
+    LocalDate bookingDate() {
+      return bookingTime.toLocalDate();
+    }
+
+    LocalDateTime bookingTime() {
+      return bookingTime;
     }
 
     enum Type {

@@ -17,6 +17,7 @@ dependencies {
   implementation("org.jspecify:jspecify:1.0.0")
   implementation("com.machinezoo.noexception:noexception:1.9.1")
   implementation("one.util:streamex:0.8.3")
+  implementation("org.threeten:threeten-extra:1.8.0")
   implementation("org.apache.commons:commons-lang3:3.18.0")
   implementation("org.springframework.retry:spring-retry:2.0.12")
   implementation("org.springframework.boot:spring-boot-starter-web")

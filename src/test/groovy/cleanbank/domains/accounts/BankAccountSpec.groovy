@@ -3,6 +3,7 @@ package cleanbank.domains.accounts
 
 import cleanbank.infra.time.TimeMachine
 import net.datafaker.Faker
+import org.threeten.extra.LocalDateRange
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.util.time.MutableClock
@@ -202,7 +203,8 @@ class BankAccountSpec extends Specification {
     account.withdraw(2.00)
 
     when: "I ask for a bank statement"
-    def actual = account.statement(from, to).json()
+    def period = LocalDateRange.ofClosed(from, to)
+    def actual = account.statement(period).json()
 
     then: "I should see all operations as a nicely formatted JSON"
     def expected = """
