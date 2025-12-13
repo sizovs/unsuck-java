@@ -1,5 +1,4 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
   java
@@ -9,7 +8,6 @@ plugins {
   id("org.springframework.boot") version "4.0.0"
   id("io.spring.dependency-management") version "1.1.7"
   id("com.github.ben-manes.versions") version "0.52.0"
-  id("net.ltgt.errorprone") version "4.3.0"
 }
 repositories {
   mavenCentral()
@@ -46,9 +44,6 @@ dependencies {
   testImplementation("org.apache.groovy:groovy-json:4.0.28")
   testImplementation("com.google.guava:guava-testlib:33.4.8-jre")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-  errorprone("com.google.errorprone:error_prone_core:2.42.0")
-  errorprone("com.uber.nullaway:nullaway:0.12.12")
 }
 
 configurations.all {
@@ -62,17 +57,6 @@ java {
   }
 }
 
-tasks.withType<JavaCompile>().configureEach {
-  options.errorprone {
-    disableAllChecks = true
-    option("NullAway:ExcludedFieldAnnotations", "jakarta.persistence.GeneratedValue")
-    option("NullAway:ExternalInitAnnotations", "jakarta.persistence.Entity,jakarta.persistence.Embeddable")
-    option("NullAway:AnnotatedPackages", "cleanbank")
-    error("NullAway")
-  }
-  options.release = java.toolchain.languageVersion.get().asInt()
-}
-
 tasks.withType<Test>().configureEach {
   useJUnitPlatform()
   testlogger {
@@ -83,27 +67,4 @@ tasks.withType<Test>().configureEach {
     events("passed", "failed")
   }
 }
-
-tasks.register("generatePackageInfo") {
-  val sourceDir = file("src/main/java/cleanbank")
-  doLast {
-    sourceDir.walkTopDown().filter { it.isDirectory }.forEach { dir ->
-      val packageInfo = File(dir, "package-info.java")
-      if (!packageInfo.exists()) {
-        val packageName = dir.relativeTo(sourceDir).path.replace(File.separatorChar, '.')
-        packageInfo.writeText(
-          """
-          @org.jspecify.annotations.NullMarked
-          package $packageName;
-          """.trimIndent()
-        )
-      }
-    }
-  }
-}
-
-tasks.named("compileJava") {
-  dependsOn("generatePackageInfo")
-}
-
 
